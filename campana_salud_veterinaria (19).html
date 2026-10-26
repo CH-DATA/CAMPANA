@@ -1,0 +1,2409 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campaña de Salud</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: #F0EEE6;
+    background-image: radial-gradient(circle at 15% 8%, rgba(14,74,54,0.06), transparent 40%),
+                       radial-gradient(circle at 90% 90%, rgba(242,194,48,0.08), transparent 45%);
+    color: #23231F;
+    min-height: 100vh;
+  }
+  .disp { font-family: 'Baloo 2', sans-serif; }
+
+  /* ---------- HEADER ---------- */
+  .header {
+    background: linear-gradient(120deg, #0A2E22 0%, #0E4A36 50%, #1F7A52 100%);
+    padding: 16px 20px;
+    position: relative;
+    overflow: hidden;
+    color: #fff;
+  }
+  .header::after {
+    content: ""; position: absolute; right: -60px; top: -60px;
+    width: 220px; height: 220px; border-radius: 50%; background: rgba(255,255,255,0.06);
+  }
+  .header-row { display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 1; }
+  .h-left { display: flex; align-items: center; gap: 12px; }
+  .logo-img {
+    width: 46px; height: 46px; border-radius: 10px; background: #fff; padding: 3px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25); object-fit: contain; flex-shrink: 0;
+  }
+  .h-title { font-size: 21px; font-weight: 800; }
+  .h-sub { font-size: 12px; opacity: 0.85; margin-top: 2px; }
+  .refresh-btn {
+    background: rgba(255,255,255,0.14); border: none; border-radius: 10px; padding: 8px 10px;
+    cursor: pointer; color: #fff; font-size: 16px;
+  }
+
+  /* ---------- LAYOUT: SIDEBAR + CONTENT ---------- */
+  .app-layout { display: flex; align-items: flex-start; max-width: 1180px; margin: 0 auto; padding: 18px 16px 60px 16px; gap: 18px; }
+
+  .sidebar {
+    width: 210px; flex-shrink: 0; background: #fff; border-radius: 18px;
+    box-shadow: 0 10px 26px rgba(15,50,35,0.10); border: 1px solid rgba(0,0,0,0.04);
+    padding: 14px 10px; position: sticky; top: 16px;
+  }
+  .side-btn {
+    display: flex; align-items: center; gap: 10px; width: 100%; text-align: left;
+    padding: 11px 12px; border-radius: 12px; font-size: 13.5px; font-weight: 600; color: #6E6A5E;
+    background: transparent; border: none; cursor: pointer; font-family: 'Inter', sans-serif;
+    margin-bottom: 4px; transition: all .15s ease;
+  }
+  .side-btn .ico { font-size: 17px; width: 22px; text-align: center; }
+  .side-btn:hover { background: #F4F1E8; }
+  .side-btn.active { background: linear-gradient(120deg, #0E4A36, #1F7A52); color: #fff; box-shadow: 0 6px 14px rgba(14,74,54,0.28); }
+  .mini-ch {
+    width: 18px; height: 18px; border-radius: 6px; margin-left: auto; flex-shrink: 0;
+    background: linear-gradient(145deg, #EFF2F1, #A9B1AF);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.25), inset 0 0 0 1px rgba(255,255,255,0.5);
+    position: relative; overflow: hidden;
+    animation: chMiniFloat 2.2s ease-in-out infinite;
+  }
+  .mini-ch::before {
+    content: ""; position: absolute; left: 3px; right: 3px; top: 6px; height: 4px; border-radius: 2px;
+    background: linear-gradient(90deg, #1F7A52, #F2C230, #1F7A52); background-size: 220% 100%;
+    animation: chMiniScan 1.8s linear infinite;
+  }
+  @keyframes chMiniFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2.5px); } }
+  @keyframes chMiniScan { 0% { background-position: 0% 0; } 100% { background-position: 220% 0; } }
+
+  .sidebar-foot { margin-top: 10px; padding: 10px 12px; border-top: 1px solid #EFEAE0; }
+  .sidebar-foot .ch-mini { display:flex; align-items:center; gap:8px; font-size: 11px; color: #9A9484; }
+
+  .content { flex: 1; min-width: 0; }
+  .tabpanel { display: none; }
+  .tabpanel.active { display: block; }
+
+  .card { background: #fff; border-radius: 18px; box-shadow: 0 6px 18px rgba(90,60,30,0.08); border: 1px solid rgba(0,0,0,0.04); }
+
+  /* ---------- ROBOT CH ---------- */
+  .robot-card {
+    display: flex; align-items: center; gap: 16px; padding: 16px 18px; margin-bottom: 16px;
+    background: linear-gradient(120deg, #0E4A36 0%, #123B2C 100%); color: #fff; position: relative; overflow: hidden;
+  }
+  .robot-card::after {
+    content: ""; position: absolute; right: -30px; bottom: -50px; width: 160px; height: 160px;
+    border-radius: 50%; background: rgba(242,194,48,0.10);
+  }
+  .robot-svg-wrap { flex-shrink: 0; filter: drop-shadow(0 10px 14px rgba(0,0,0,0.35)); animation: chFloatBig 3.2s ease-in-out infinite; }
+  @keyframes chFloatBig { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-6px) rotate(-1.5deg); } }
+  .robot-txt { position: relative; z-index: 1; }
+  .robot-name { display:inline-flex; align-items:center; gap:6px; background: rgba(242,194,48,0.16); color:#F2C230; font-size:11px; font-weight:800; padding:3px 9px; border-radius:999px; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .robot-title { font-size: 14.5px; font-weight: 700; }
+  .robot-sub { font-size: 12px; opacity: 0.82; margin-top: 3px; line-height: 1.4; max-width: 420px; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px; }
+  .stat-card { padding: 14px 10px; text-align: center; }
+  .stat-value { font-size: 24px; font-weight: 800; }
+  .stat-label { font-size: 11px; color: #8A8478; font-weight: 600; }
+
+  .lock-note { padding: 14px; margin-top: 4px; display: flex; gap: 10px; align-items: flex-start; }
+  .lock-note .txt { font-size: 13px; color: #6B6656; }
+
+  .form-card { padding: 18px; max-width: 460px; margin: 0 auto; }
+  .form-title { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+  .form-sub { font-size: 13px; color: #8A8478; margin-bottom: 14px; }
+  .field-wrap { position: relative; flex: 1; }
+  .field-ico { position: absolute; left: 10px; top: 11px; font-size: 14px; color: #B7B09E; }
+  .input {
+    width: 100%; border: 1.5px solid #E4DFD3; border-radius: 12px; padding: 10px 12px 10px 32px;
+    font-size: 14px; font-family: 'Inter', sans-serif; outline: none; background: #FCFBF8;
+  }
+  .input:focus { border-color: #0E4A36; }
+  .form-col { display: flex; flex-direction: column; gap: 10px; }
+  .btn-primary {
+    background: #0E4A36; color: #fff; border: none; border-radius: 12px; padding: 11px 18px;
+    font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 14px;
+  }
+  .btn-primary:hover { background: #0B3B2E; }
+  .row-gap { display: flex; gap: 10px; }
+  .pill-opt {
+    flex: 1; text-align: center; padding: 9px 0; cursor: pointer; border: 1.5px solid #E4DFD3;
+    border-radius: 999px; font-size: 12px; font-weight: 700; background: #fff; color: #8A8478;
+  }
+  .pill-opt.selected { background: #EAF7EF; color: #2E7D4F; border-color: #CFEBDA; }
+
+  .msg-box { margin-top: 12px; font-size: 12.5px; border-radius: 10px; padding: 8px 10px; }
+  .msg-ok { background: #EAF7EF; color: #2E7D4F; }
+  .msg-error { background: #FDF3E0; color: #8A5A12; }
+
+  /* ---------- 3D FOLDER CARDS ---------- */
+  .servicios-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px 14px; margin-bottom: 26px; }
+  .folder {
+    position: relative; margin-top: 20px; cursor: pointer; border: none; background: none;
+    text-align: left; padding: 0; font-family: 'Inter', sans-serif; perspective: 500px;
+  }
+  .folder .page {
+    position: absolute; left: 6px; right: 6px; border-radius: 10px 10px 0 0;
+    background: #EDEAE1; box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+  }
+  .folder .page.p1 { top: -14px; height: 18px; background: #E4E0D3; }
+  .folder .page.p2 { top: -8px; height: 14px; background: #EEEBE0; }
+  .folder .tab-piece {
+    position: absolute; top: -4px; left: 14px; width: 44%; height: 14px;
+    border-radius: 8px 8px 0 0; opacity: 0.95; z-index: 2;
+  }
+  .folder .body {
+    position: relative; z-index: 1; border-radius: 14px; padding: 18px 14px 16px 14px; color: #fff;
+    min-height: 112px; display: flex; flex-direction: column; justify-content: space-between;
+    transform-style: preserve-3d; transition: transform .25s ease, box-shadow .25s ease;
+    box-shadow: 0 10px 0 rgba(0,0,0,0.16), 0 16px 24px rgba(0,0,0,0.20);
+  }
+  .folder .body .sheen {
+    position: absolute; inset: 0; border-radius: 14px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0) 40%);
+    pointer-events: none;
+  }
+  .folder:hover .body { transform: translateY(-6px) rotateX(6deg) rotateY(-4deg); box-shadow: 0 14px 0 rgba(0,0,0,0.16), 0 26px 34px rgba(0,0,0,0.26); }
+  .folder.selected .body {
+    transform: translateY(-6px) rotateX(6deg) rotateY(-4deg);
+    filter: brightness(0.78) saturate(1.15);
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.85), 0 0 0 6px rgba(0,0,0,0.30), 0 20px 34px rgba(0,0,0,0.38);
+  }
+  .folder.selected .check-badge {
+    position: absolute; top: -8px; right: -6px; width: 26px; height: 26px; border-radius: 50%;
+    background: #fff; color: #0E4A36; display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 800; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 3;
+  }
+  .folder .ico { font-size: 22px; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.25)); }
+  .folder .flabel { font-weight: 700; font-size: 12.5px; line-height: 1.2; font-family: 'Baloo 2', sans-serif; position: relative; z-index: 1; }
+  .folder .fcount { font-size: 10.5px; opacity: 0.85; position: relative; z-index: 1; }
+
+  .svc-panel { padding: 18px; max-width: 460px; margin: 0 auto 22px auto; }
+  .placeholder-txt { margin-bottom: 6px; }
+  .svc-head { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+  .svc-head .ico { font-size: 18px; }
+  .svc-head .name { font-weight: 700; font-size: 16px; font-family: 'Baloo 2', sans-serif; }
+  .svc-sub { font-size: 13px; color: #8A8478; margin-bottom: 14px; }
+
+  .block-box { margin-top: 14px; background: #FDF3E0; border: 1px solid #F3D9A0; border-radius: 12px; padding: 14px; }
+  .block-box .block-header { display: flex; gap: 8px; align-items: flex-start; }
+  .block-box .icow { font-size: 20px; flex-shrink: 0; }
+  .block-box .txt { font-size: 13.5px; color: #8A5A12; font-weight: 600; }
+  .status-pills { display: flex; gap: 10px; margin-top: 12px; }
+  .status-pill {
+    flex: 1; text-align: center; padding: 10px 4px; border-radius: 12px;
+    font-size: 12.5px; font-weight: 800; line-height: 1.5; color: #fff;
+  }
+  .pill-ok { background: linear-gradient(120deg, #2E7D4F, #1F7A52); }
+  .pill-bad {
+    background: linear-gradient(120deg, #E8843C, #D9761F);
+    animation: pulseWarn 1.3s ease-in-out infinite;
+  }
+  @keyframes pulseWarn {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(216,118,31,0.55); }
+    50% { box-shadow: 0 0 0 9px rgba(216,118,31,0); }
+  }
+
+  .found-box { margin-top: 14px; background: #F6FBF8; border: 1px solid #CFEBDA; border-radius: 12px; padding: 12px; }
+  .found-name { font-size: 14px; font-weight: 700; color: #2E7D4F; margin-bottom: 4px; }
+  .found-meta { font-size: 12.5px; color: #6B6656; margin-bottom: 10px; }
+  .pill-done { border-radius: 999px; font-size: 11px; font-weight: 700; padding: 3px 10px; display: inline-flex; align-items: center; gap: 4px; background: #EAF7EF; color: #2E7D4F; }
+
+  .placeholder-txt { text-align: center; color: #8A8478; font-size: 13px; }
+
+  .resumen-top { display: flex; gap: 8px; margin-bottom: 12px; }
+  .trash-btn { background: #FDF3E0; border: 1px solid #F3D9A0; border-radius: 12px; padding: 0 12px; cursor: pointer; font-size: 16px; }
+  .table-wrap { overflow-x: auto; max-height: 460px; overflow-y: auto; }
+  table.res { border-collapse: collapse; font-size: 12.5px; width: 100%; }
+  table.res th, table.res td { padding: 8px 10px; border-bottom: 1px solid #EEE8DA; white-space: nowrap; }
+  table.res th { text-align: left; color: #8A8478; font-weight: 700; background: #FBF8F1; position: sticky; top: 0; }
+  .ok-ico { color: #2E7D4F; }
+  .no-ico { color: #B5842B; }
+  .dash { color: #D8D2C2; }
+
+  .toast {
+    position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); background: #23231F; color: #fff;
+    padding: 10px 18px; border-radius: 12px; font-size: 13px; font-weight: 600; z-index: 50;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25); display: none;
+  }
+  .toast.error { background: #8A5A12; }
+
+  /* ---------- FOTO MASCOTA (captura/preview) ---------- */
+  .foto-field { display: flex; align-items: center; gap: 12px; margin-top: 2px; }
+  .foto-preview {
+    width: 64px; height: 64px; border-radius: 14px; background: #F4F1E8; border: 1.5px dashed #E4DFD3;
+    display: flex; align-items: center; justify-content: center; font-size: 22px; color: #B7B09E;
+    overflow: hidden; flex-shrink: 0;
+  }
+  .foto-preview img { width: 100%; height: 100%; object-fit: cover; }
+  .foto-btn-col { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+  .foto-btn-row { display: flex; gap: 6px; }
+  .foto-btn-row .foto-btn { flex: 1; padding: 9px 6px; }
+  .foto-btn {
+    border: 1.5px solid #E4DFD3; background: #FCFBF8; border-radius: 12px; padding: 9px 12px;
+    font-size: 13px; font-weight: 700; color: #4A473D; cursor: pointer; font-family: 'Inter', sans-serif;
+    display: flex; align-items: center; gap: 6px; justify-content: center;
+  }
+  .foto-btn:hover { background: #F4F1E8; }
+  .foto-remove { font-size: 11px; color: #B5842B; text-decoration: underline; cursor: pointer; background: none; border: none; padding: 0; text-align: center; }
+
+  /* ---------- BLOQUES DE MASCOTA (registro múltiple) ---------- */
+  #mascotas-container { display: flex; flex-direction: column; gap: 14px; margin-top: 4px; }
+  .mascota-block {
+    position: relative; border: 1.5px solid #E4DFD3; border-radius: 18px; padding: 14px 14px 16px;
+    background: linear-gradient(180deg, #FDFCF9 0%, #FAF8F2 100%);
+    display: flex; flex-direction: column; gap: 10px;
+    animation: mascotaIn .28s ease;
+  }
+  @keyframes mascotaIn { from { opacity: 0; transform: translateY(-6px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  .mascota-block::before {
+    content: ""; position: absolute; left: 0; top: 14px; bottom: 14px; width: 4px; border-radius: 4px;
+    background: linear-gradient(180deg, #1F7A52, #C9E265);
+  }
+  .mascota-block-head { display: flex; align-items: center; justify-content: space-between; }
+  .mascota-block-num {
+    font-size: 12px; font-weight: 800; color: #0E4A36; background: #EAF7EF;
+    padding: 5px 12px; border-radius: 20px; display: inline-flex; align-items: center; gap: 4px;
+  }
+  .mascota-remove {
+    background: none; border: none; color: #B23B3B; font-size: 11px; font-weight: 700; cursor: pointer;
+    padding: 4px 8px; border-radius: 8px; display: inline-flex; align-items: center; gap: 3px; transition: background .15s ease;
+  }
+  .mascota-remove:hover { background: #FBEAEA; }
+  .btn-add-mascota {
+    width: 100%; margin-top: 4px; padding: 13px; border: 1.5px dashed #1F7A52; border-radius: 16px;
+    background: #F3FBF6; color: #0E4A36; font-weight: 800; font-size: 13.5px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 8px; transition: all .18s ease;
+    font-family: 'Inter', sans-serif;
+  }
+  .btn-add-mascota:hover { background: #E4F5EA; border-style: solid; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(31,122,82,0.18); }
+  .btn-add-mascota .plus-circle {
+    width: 22px; height: 22px; border-radius: 50%; background: linear-gradient(120deg, #0E4A36, #1F7A52);
+    color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800; flex-shrink: 0;
+  }
+
+  /* ---------- SELECTOR DE MASCOTA (atención) ---------- */
+  .mascota-picker { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+  .mascota-pick-btn {
+    text-align: left; border: 1.5px solid #E4DFD3; background: #fff; border-radius: 14px; padding: 12px 14px;
+    font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700; color: #2E2B22; cursor: pointer; transition: all .15s ease;
+  }
+  .mascota-pick-btn span { font-weight: 500; color: #8A8478; }
+  .mascota-pick-btn:hover { border-color: #1F7A52; background: #F3FBF6; }
+
+  /* ---------- LINK EN TABLA (nombre mascota) ---------- */
+  .link-btn {
+    background: none; border: none; padding: 0; cursor: pointer; font-family: 'Inter', sans-serif;
+    font-size: 12.5px; font-weight: 700; color: #0E4A36; text-decoration: underline; text-underline-offset: 2px;
+  }
+  .link-btn:hover { color: #1F7A52; }
+  .check-btn {
+    width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid #D8D2C2; cursor: pointer;
+    background: #fff; color: transparent; font-size: 14px; font-weight: 800;
+    display: inline-flex; align-items: center; justify-content: center; transition: all .18s ease;
+  }
+  .check-btn:hover { border-color: #1F7A52; }
+  .check-btn.checked {
+    background: linear-gradient(120deg, #0E4A36, #1F7A52); color: #fff; border-color: transparent;
+    box-shadow: 0 3px 8px rgba(14,74,54,0.35);
+  }
+  .dl-btn {
+    width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid #D8D2C2; cursor: pointer;
+    background: #fff; color: #0E4A36; font-size: 14px;
+    display: inline-flex; align-items: center; justify-content: center; transition: all .18s ease;
+  }
+  .dl-btn:hover { border-color: #1F7A52; background: #EAF7EF; }
+  .dl-btn:disabled { opacity: 0.6; cursor: default; }
+  .del-btn {
+    width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid #E9C6C6; cursor: pointer;
+    background: #fff; color: #B23B3B; font-size: 13px;
+    display: inline-flex; align-items: center; justify-content: center; transition: all .18s ease;
+  }
+  .del-btn:hover { border-color: #B23B3B; background: #FBEAEA; transform: scale(1.05); }
+
+  /* ---------- FICHA MODAL (CARNET) ---------- */
+  .ficha-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(20,24,20,0.6); z-index: 90;
+    align-items: center; justify-content: center; padding: 16px;
+  }
+  .ficha-overlay.open { display: flex; }
+  .ficha-close-wrap { display: flex; justify-content: flex-end; margin-bottom: 8px; width: 100%; max-width: 480px; }
+  .ficha-close {
+    background: rgba(255,255,255,0.9); border: none; color: #23231F; width: 30px; height: 30px; border-radius: 50%;
+    cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+  }
+  .carnet-wrap { display: flex; flex-direction: column; align-items: center; max-height: 92vh; overflow-y: auto; }
+  .carnet-card {
+    width: 100%; max-width: 480px; border-radius: 16px; position: relative; overflow: hidden;
+    background-color: #123B2C;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90' viewBox='0 0 90 90'%3E%3Cg fill='%23ffffff' fill-opacity='0.055'%3E%3Cellipse cx='45' cy='58' rx='14' ry='10'/%3E%3Cellipse cx='27' cy='38' rx='6' ry='7.5'/%3E%3Cellipse cx='38' cy='28' rx='6' ry='7.5'/%3E%3Cellipse cx='52' cy='28' rx='6' ry='7.5'/%3E%3Cellipse cx='63' cy='38' rx='6' ry='7.5'/%3E%3C/g%3E%3C/svg%3E");
+    background-repeat: repeat; box-shadow: 0 24px 60px rgba(0,0,0,0.4); color: #fff; font-family: 'Inter', sans-serif;
+  }
+  .carnet-header { display: flex; justify-content: space-between; align-items: flex-start; padding: 16px 16px 4px 16px; gap: 10px; }
+  .carnet-logo { display: flex; align-items: center; gap: 8px; }
+  .carnet-logo .ico { width: 34px; height: 34px; border-radius: 8px; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; overflow: hidden; }
+  .carnet-logo .ico img { width: 100%; height: 100%; object-fit: contain; }
+  .carnet-logo .txt { font-size: 10px; font-weight: 700; line-height: 1.25; opacity: 0.95; }
+  .carnet-logo .txt b { font-size: 12px; display: block; }
+  .carnet-badge { background: #C9D97A; color: #123B2C; border-radius: 8px; padding: 6px 10px; text-align: right; font-size: 9px; font-weight: 700; line-height: 1.3; }
+  .carnet-badge .big { font-size: 14px; font-weight: 800; display: block; }
+  .carnet-body { display: flex; gap: 14px; padding: 10px 16px 20px 16px; position: relative; z-index: 1; }
+  .carnet-photo-col { flex-shrink: 0; width: 40%; }
+  .carnet-photo {
+    width: 100%; aspect-ratio: 1/1; border-radius: 4px; border: 3px solid #fff; background: rgba(255,255,255,0.12);
+    overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 46px;
+  }
+  .carnet-photo img { width: 100%; height: 100%; object-fit: cover; }
+  .carnet-id-label { background: #C9D97A; color: #123B2C; font-size: 9px; font-weight: 800; text-align: center; padding: 5px 4px 2px 4px; margin-top: 6px; border-radius: 3px 3px 0 0; letter-spacing: 0.3px; }
+  .carnet-id-value { background: #E4EFC0; color: #123B2C; font-size: 11px; font-weight: 800; text-align: center; padding: 4px; border-radius: 0 0 3px 3px; letter-spacing: 0.5px; }
+  .carnet-fields { flex: 1; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .carnet-field { background: #B7CB8C; border-radius: 3px; padding: 5px 9px; }
+  .carnet-field-row { display: flex; gap: 6px; }
+  .carnet-field-row .carnet-field { flex: 1; }
+  .carnet-field .f-lbl { font-size: 8.5px; font-weight: 700; color: #2E4325; opacity: 0.85; }
+  .carnet-field .f-val { font-size: 12px; font-weight: 800; color: #12240D; margin-top: 1px; word-break: break-word; }
+  .carnet-status-row { display: flex; gap: 6px; margin-top: 2px; }
+  .carnet-status-pill { flex: 1; text-align: center; font-size: 9.5px; font-weight: 800; padding: 5px 4px; border-radius: 3px; }
+  .carnet-status-pill.ok { background: #C9D97A; color: #123B2C; }
+  .carnet-status-pill.bad { background: rgba(255,255,255,0.18); color: #fff; }
+  .carnet-treat-wrap { padding: 0 16px 18px 16px; position: relative; z-index: 1; }
+  .carnet-treat-title { font-size: 9.5px; font-weight: 800; opacity: 0.8; letter-spacing: 0.4px; margin-bottom: 5px; }
+  .carnet-treat-list { display: flex; flex-wrap: wrap; gap: 5px; }
+  .carnet-treat-chip { font-size: 10px; font-weight: 700; padding: 4px 9px; border-radius: 999px; background: rgba(255,255,255,0.12); color: #fff; }
+  .carnet-treat-chip.done { background: #C9D97A; color: #123B2C; }
+
+  .carnet-download-btn {
+    width: 100%; max-width: 480px; margin-top: 10px; background: #0E4A36; color: #fff; border: none;
+    border-radius: 12px; padding: 12px 16px; font-weight: 700; font-size: 14px; cursor: pointer;
+    font-family: 'Inter', sans-serif; display: flex; align-items: center; justify-content: center; gap: 8px;
+    box-shadow: 0 8px 18px rgba(14,74,54,0.3);
+  }
+  .carnet-download-btn:hover { background: #0B3B2E; }
+  .carnet-download-btn:disabled { opacity: 0.6; cursor: wait; }
+
+  .footer-note { text-align: center; font-size: 11px; color: #B7B09E; margin-top: 30px; }
+
+  /* ---------- SORTEO (RULETA) ---------- */
+  .sorteo-card { padding: 26px 18px 22px 18px; text-align: center; max-width: 460px; margin: 0 auto; }
+  .ruleta-wrap { position: relative; width: 264px; height: 264px; margin: 26px auto 4px auto; }
+  .ruleta-rim {
+    position: absolute; inset: -16px; border-radius: 50%; z-index: 0;
+    background: linear-gradient(135deg, #FBF8F1 0%, #D6D0C0 30%, #9B9480 55%, #C7C1AF 75%, #FBF8F1 100%);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.35), inset 0 0 0 4px rgba(255,255,255,0.55), inset 0 -10px 16px rgba(0,0,0,0.28);
+  }
+  .ruleta-bulb {
+    position: absolute; width: 7px; height: 7px; border-radius: 50%; z-index: 1;
+    background: radial-gradient(circle at 35% 30%, #FFF8DE 0%, #F2C230 55%, #A9770F 100%);
+    box-shadow: 0 0 7px 2px rgba(242,194,48,0.65), inset 0 0 2px rgba(255,255,255,0.7);
+    transition: background .12s ease, box-shadow .12s ease;
+  }
+  .ruleta-bulb.off {
+    background: radial-gradient(circle at 35% 30%, #8f8a78, #5c584c);
+    box-shadow: inset 0 0 2px rgba(0,0,0,0.4); opacity: 0.7;
+  }
+  .ruleta-disco {
+    position: absolute; inset: 8px; border-radius: 50%; z-index: 2; background: #E4E0D3;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3) inset, 0 0 0 2px rgba(255,255,255,0.35) inset;
+    transition: transform 4.3s cubic-bezier(.13,.66,.15,1);
+  }
+  .ruleta-disco::after {
+    content: ""; position: absolute; inset: 0; border-radius: 50%; pointer-events: none;
+    background: radial-gradient(circle at 38% 30%, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.06) 30%, rgba(0,0,0,0.18) 100%);
+  }
+  .ruleta-puntero-wrap { position: absolute; top: -26px; left: 50%; transform: translateX(-50%); z-index: 6; }
+  .ruleta-puntero {
+    width: 0; height: 0; margin: 0 auto;
+    border-left: 13px solid transparent; border-right: 13px solid transparent;
+    border-top: 28px solid #F2C230;
+    filter: drop-shadow(0 4px 5px rgba(0,0,0,0.4));
+  }
+  .ruleta-puntero-pin {
+    width: 15px; height: 15px; border-radius: 50%; margin: -6px auto 0 auto;
+    background: radial-gradient(circle at 35% 30%, #fff, #B9B2A0 55%, #6B6656 100%);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.45);
+  }
+  .ruleta-centro {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    width: 70px; height: 70px; border-radius: 50%; cursor: pointer; z-index: 4;
+    background: radial-gradient(circle at 35% 28%, #2A9C68, #0E4A36 70%);
+    display: flex; align-items: center; justify-content: center; text-align: center;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.35), inset 0 2px 3px rgba(255,255,255,0.4), inset 0 -6px 10px rgba(0,0,0,0.35);
+  }
+  .ruleta-centro span { color: #F2C230; font-weight: 800; font-size: 12px; font-family: 'Baloo 2', sans-serif; letter-spacing: 0.5px; }
+  .ruleta-centro:hover { filter: brightness(1.1); }
+  .ruleta-centro:active { transform: translate(-50%,-50%) scale(0.96); }
+  .ruleta-stand { width: 16px; height: 30px; margin: -4px auto 0 auto; background: linear-gradient(180deg,#D6D0C0,#8c8674); border-radius: 0 0 4px 4px; }
+  .ruleta-base { width: 130px; height: 16px; margin: 0 auto 10px auto; border-radius: 10px; background: linear-gradient(180deg,#B9B2A0,#6b6656); box-shadow: 0 10px 18px rgba(0,0,0,0.3); }
+  .sorteo-count { font-size: 12.5px; color: #8A8478; margin-bottom: 4px; }
+  .sorteo-list {
+    max-height: 130px; overflow-y: auto; text-align: left; background: #FBF8F1;
+    border: 1px solid #EFEAE0; border-radius: 12px; padding: 10px 12px; font-size: 12px;
+    color: #6B6656; margin-top: 14px;
+  }
+  .winner-box {
+    margin-top: 14px; background: linear-gradient(120deg, #0E4A36 0%, #123B2C 100%); color: #fff;
+    border-radius: 16px; padding: 16px; box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+  }
+  .winner-box .label { font-size: 11px; letter-spacing: 1px; color: #F2C230; font-weight: 800; }
+  .winner-box .name { font-size: 18px; font-weight: 800; margin-top: 4px; font-family: 'Baloo 2', sans-serif; }
+  .winner-box .meta { font-size: 12px; opacity: 0.85; margin-top: 2px; }
+  .winner-actions { display: flex; gap: 8px; margin-top: 12px; justify-content: center; }
+
+  @media (max-width: 720px) {
+    .app-layout { flex-direction: column; }
+    .sidebar { width: 100%; position: static; display: flex; overflow-x: auto; gap: 4px; }
+    .side-btn { flex-direction: column; min-width: 78px; text-align: center; font-size: 11px; }
+    .servicios-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* ---------- LANDING / PORTAL ---------- */
+  .landing-screen {
+    min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 30px 16px; position: relative; overflow: hidden;
+    background:
+      radial-gradient(circle at 12% 15%, rgba(14,74,54,0.16) 0%, transparent 42%),
+      radial-gradient(circle at 88% 20%, rgba(242,194,48,0.18) 0%, transparent 40%),
+      radial-gradient(circle at 20% 90%, rgba(31,122,82,0.14) 0%, transparent 45%),
+      radial-gradient(circle at 85% 85%, rgba(139,90,18,0.14) 0%, transparent 42%),
+      linear-gradient(160deg, #F6F3EC 0%, #EDE9DC 100%);
+  }
+  .landing-screen::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0.5;
+    background-image:
+      linear-gradient(rgba(14,74,54,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(14,74,54,0.05) 1px, transparent 1px);
+    background-size: 42px 42px;
+    mask-image: radial-gradient(circle at 50% 40%, rgba(0,0,0,0.9) 0%, transparent 72%);
+  }
+  .landing-orb {
+    position: absolute; border-radius: 50%; filter: blur(2px); pointer-events: none;
+    animation: orbFloat 7s ease-in-out infinite;
+  }
+  @keyframes orbFloat { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-18px) scale(1.06); } }
+  .landing-ch-wrap { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 6px; }
+
+  .landing-head { text-align: center; margin-bottom: 34px; }
+  .landing-logo { width: 66px; height: 66px; border-radius: 14px; background: #fff; padding: 4px; box-shadow: 0 8px 18px rgba(0,0,0,0.15); object-fit: contain; margin-bottom: 12px; }
+  .landing-title { font-size: 24px; font-weight: 800; }
+  .landing-sub { font-size: 13.5px; color: #8A8478; margin-top: 4px; }
+  .portal-grid { display: flex; gap: 22px; flex-wrap: wrap; justify-content: center; max-width: 640px; }
+  .portal-btn {
+    width: 250px; border: none; border-radius: 22px; cursor: pointer; text-align: left;
+    padding: 26px 22px; color: #fff; position: relative; overflow: hidden; font-family: 'Inter', sans-serif;
+    box-shadow: 0 14px 30px rgba(15,50,35,0.22); transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .portal-btn:hover { transform: translateY(-6px); box-shadow: 0 20px 38px rgba(15,50,35,0.30); }
+  .portal-btn::after {
+    content: ""; position: absolute; right: -30px; bottom: -40px; width: 150px; height: 150px;
+    border-radius: 50%; background: rgba(255,255,255,0.10);
+  }
+  .portal-btn.medico { background: linear-gradient(135deg, #0E4A36 0%, #123B2C 100%); }
+  .portal-btn.vet { background: linear-gradient(135deg, #8A5A12 0%, #B5760F 100%); }
+  .portal-ico-wrap {
+    width: 56px; height: 56px; border-radius: 16px; background: rgba(255,255,255,0.16);
+    display: flex; align-items: center; justify-content: center; font-size: 28px; margin-bottom: 16px;
+    position: relative; z-index: 1;
+  }
+  .portal-name { font-size: 18px; font-weight: 800; font-family: 'Baloo 2', sans-serif; position: relative; z-index: 1; }
+  .portal-desc { font-size: 12.5px; opacity: 0.85; margin-top: 6px; line-height: 1.4; position: relative; z-index: 1; }
+  .portal-arrow { margin-top: 16px; font-size: 12px; font-weight: 700; opacity: 0.9; position: relative; z-index: 1; }
+
+  /* ---------- MODAL DE CLAVE ---------- */
+  .pw-modal-overlay {
+    position: fixed; inset: 0; background: rgba(11,59,46,0.55); backdrop-filter: blur(2px);
+    display: flex; align-items: center; justify-content: center; z-index: 200; padding: 16px;
+  }
+  .pw-modal-card {
+    background: #fff; border-radius: 18px; padding: 26px 22px; max-width: 320px; width: 100%;
+    box-shadow: 0 24px 48px rgba(0,0,0,0.35); text-align: center;
+  }
+  .pw-modal-card .pw-icon { font-size: 30px; margin-bottom: 6px; }
+  .pw-modal-card .pw-title { font-weight: 800; font-size: 16px; margin-bottom: 4px; }
+  .pw-modal-card .pw-sub { font-size: 12.5px; color: #8A8478; margin-bottom: 14px; line-height: 1.4; }
+  .pw-modal-actions { display: flex; gap: 8px; margin-top: 12px; }
+  .pw-modal-actions button { flex: 1; }
+  .pw-cancel-btn {
+    background: #F4F1E8; color: #6E6A5E; border: none; border-radius: 12px;
+    padding: 11px 0; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 14px;
+  }
+
+  .back-btn {
+    background: rgba(255,255,255,0.14); border: none; border-radius: 10px; padding: 8px 12px;
+    cursor: pointer; color: #fff; font-size: 12.5px; font-weight: 700; font-family: 'Inter', sans-serif;
+    display: flex; align-items: center; gap: 6px;
+  }
+
+  /* ---------- VET ATENCION CHECKLIST ---------- */
+  .treat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 14px; }
+  .treat-item {
+    display: flex; align-items: center; gap: 8px; padding: 10px 10px; border-radius: 12px;
+    border: 1.5px solid #E4DFD3; background: #FCFBF8; cursor: pointer; font-size: 12.5px; font-weight: 600; color: #6E6A5E;
+  }
+  .treat-item.checked { background: #EAF7EF; border-color: #CFEBDA; color: #2E7D4F; }
+  .treat-item input { width: 16px; height: 16px; accent-color: #0E4A36; flex-shrink: 0; }
+  .pet-badge {
+    display: inline-flex; align-items: center; gap: 4px; background: #FDF3E0; color: #8A5A12;
+    border-radius: 999px; font-size: 11px; font-weight: 700; padding: 3px 10px; margin-top: 4px;
+  }
+</style>
+</head>
+<body>
+
+<div class="landing-screen" id="landing-screen">
+  <div class="landing-orb" style="width:220px;height:220px;left:6%;top:12%;background:radial-gradient(circle,rgba(14,74,54,0.22),transparent 70%);"></div>
+  <div class="landing-orb" style="width:180px;height:180px;right:8%;top:18%;background:radial-gradient(circle,rgba(242,194,48,0.22),transparent 70%);animation-delay:1.4s;"></div>
+  <div class="landing-orb" style="width:200px;height:200px;left:12%;bottom:8%;background:radial-gradient(circle,rgba(31,122,82,0.20),transparent 70%);animation-delay:2.6s;"></div>
+  <div class="landing-orb" style="width:160px;height:160px;right:14%;bottom:12%;background:radial-gradient(circle,rgba(139,90,18,0.20),transparent 70%);animation-delay:0.8s;"></div>
+
+  <div class="landing-head">
+    <div class="landing-ch-wrap">
+      <img src="data:image/jpeg;base64,PLACEHOLDER_LOGO" alt="Logo Municipalidad Distrital de Lurigancho" class="landing-logo" id="landing-logo-img" style="margin-bottom:0;">
+      <div id="ch-landing-slot"></div>
+    </div>
+    <div class="landing-title disp">Campaña de Salud</div>
+    <div class="landing-sub">Municipalidad Distrital de Lurigancho · Elige el módulo al que deseas ingresar</div>
+  </div>
+  <div class="portal-grid">
+    <button class="portal-btn medico" onclick="openApp('humano')">
+      <div class="portal-ico-wrap">🩺</div>
+      <div class="portal-name disp">Campaña de Salud</div>
+      <div class="portal-desc">Triaje, SISFOH y carpetas de atención para personas.</div>
+      <div class="portal-arrow">Ingresar →</div>
+    </button>
+    <button class="portal-btn vet" onclick="openApp('vet')">
+      <div class="portal-ico-wrap">🐶</div>
+      <div class="portal-name disp">Campaña Veterinaria</div>
+      <div class="portal-desc">Registro del dueño y la mascota, SISFOH y atención veterinaria.</div>
+      <div class="portal-arrow">Ingresar →</div>
+    </button>
+  </div>
+</div>
+
+<div id="pw-modal-root"></div>
+
+<div id="app-humano" style="display:none;">
+
+<div class="header">
+  <div class="header-row">
+    <div class="h-left">
+      <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAb8BvwMBEQACEQEDEQH/xAAcAAEAAQUBAQAAAAAAAAAAAAAABQEDBAYHAgj/xABTEAABAwMCAgUHBwYKCQMFAQABAAIDBAURBhIhMQcTQVFhFCIycYGR0RUWVZShscEjNkJSdLIzNDViY3JzgpKTCCRTg6LC0uHwQ1TxJSZFZYQX/8QAGwEBAAIDAQEAAAAAAAAAAAAAAAECAwQFBgf/xAA4EQEAAgECBAMHAwMDAwUAAAAAAQIDBBEFEiExExRSIjIzQVFxkWGBoQYVNBZCsSNT8SRDwdHw/9oADAMBAAIRAxEAPwDuKAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICChOEDKCqAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgi7veG2ySFr4HSCXPFrgMYx8Vp6vWU0sRN2XHinJ0hAXi9SVr4hB1kDI3B3MZLuzl2BcTW8X5tvBltYtLMe8zW6pYymaX0sjpgPOAIDc+C3cfGcNor9WKdLaJn6NkY7c1rsYyM4XZid2q9KQQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE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iY3W20sAOWwxg9+0Ijlj6LobhEm3xQ2VwgqiQoPO1A24QAERs9Il5xxQVAwiAjKJeHMDgWuAI7iMojbd5bTxMOWRRtPeGgIjlj6Lm1Em1DZUDCJVQedqI2AEFSMol4fCx4w9rXf1hlETET3hSOCOP+DjYz+qMIjlj6LjRhFlUBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBB//9k=" alt="Logo Municipalidad Distrital de Lurigancho" class="logo-img">
+      <div>
+        <div class="h-title disp">Campaña de Salud</div>
+        <div class="h-sub">Municipalidad Distrital de Lurigancho</div>
+      </div>
+    </div>
+    <div style="display:flex; gap:8px;">
+      <button class="back-btn" onclick="goLanding()" title="Volver al inicio">⬅ Portal</button>
+      <button class="refresh-btn" onclick="renderAll()" title="Actualizar vista">⟳</button>
+    </div>
+  </div>
+</div>
+
+<div class="app-layout">
+
+  <div class="sidebar" id="sidebar"></div>
+
+  <div class="content">
+
+    <div class="tabpanel" id="panel-inicio">
+      <div class="card robot-card">
+        <div class="robot-svg-wrap">
+          <svg viewBox="0 0 140 156" width="100" height="112" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="ringGlow" cx="0.5" cy="0.5" r="0.5">
+                <stop offset="0" stop-color="#F2C230" stop-opacity="0.55"/>
+                <stop offset="1" stop-color="#F2C230" stop-opacity="0"/>
+              </radialGradient>
+              <linearGradient id="bodyMetal" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#FFFFFF"/>
+                <stop offset="0.5" stop-color="#D7DCDB"/>
+                <stop offset="1" stop-color="#A9B1AF"/>
+              </linearGradient>
+              <linearGradient id="headMetal" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#FFFFFF"/>
+                <stop offset="1" stop-color="#C2C9C7"/>
+              </linearGradient>
+              <linearGradient id="visorGlow" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#1F7A52"/>
+                <stop offset="0.5" stop-color="#F2C230"/>
+                <stop offset="1" stop-color="#1F7A52"/>
+              </linearGradient>
+              <radialGradient id="coreGlow" cx="0.5" cy="0.5" r="0.5">
+                <stop offset="0" stop-color="#FFF6D0"/>
+                <stop offset="0.6" stop-color="#F2C230"/>
+                <stop offset="1" stop-color="#B5840F"/>
+              </radialGradient>
+            </defs>
+
+            <ellipse cx="70" cy="148" rx="52" ry="8" fill="url(#ringGlow)"/>
+            <ellipse cx="70" cy="148" rx="34" ry="3.2" fill="none" stroke="#F2C230" stroke-width="1" opacity="0.5">
+              <animate attributeName="rx" values="30;36;30" dur="2.6s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="0.3;0.6;0.3" dur="2.6s" repeatCount="indefinite"/>
+            </ellipse>
+
+            <path d="M18 138 Q18 96 40 90 L100 90 Q122 96 122 138 Z" fill="url(#bodyMetal)" stroke="#9AA3A0" stroke-width="1"/>
+            <path d="M40 90 L100 90 Q108 92 112 98 L28 98 Q32 92 40 90 Z" fill="#EDEAE1" opacity="0.5"/>
+
+            <circle cx="70" cy="114" r="14" fill="none" stroke="#F2C230" stroke-width="1.2" opacity="0.55"/>
+            <circle cx="70" cy="114" r="9.5" fill="url(#coreGlow)">
+              <animate attributeName="r" values="8.5;10;8.5" dur="1.8s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="0.85;1;0.85" dur="1.8s" repeatCount="indefinite"/>
+            </circle>
+
+            <rect x="55" y="76" width="30" height="16" rx="8" fill="url(#bodyMetal)" stroke="#9AA3A0" stroke-width="1"/>
+
+            <rect x="34" y="18" width="72" height="62" rx="30" fill="url(#headMetal)" stroke="#9AA3A0" stroke-width="1"/>
+            <rect x="40" y="24" width="60" height="6" rx="3" fill="#F2C230" opacity="0.35"/>
+
+            <rect x="44" y="44" width="52" height="12" rx="6" fill="url(#visorGlow)">
+              <animate attributeName="opacity" values="0.65;1;0.65" dur="2.2s" repeatCount="indefinite"/>
+            </rect>
+            <rect x="44" y="44" width="52" height="12" rx="6" fill="none" stroke="#0B3B2E" stroke-width="0.6" opacity="0.3"/>
+            <circle cy="50" r="3.2" fill="#FFFFFF" opacity="0.9">
+              <animate attributeName="cx" values="52;88;52" dur="2.6s" repeatCount="indefinite"/>
+            </circle>
+
+            <rect x="24" y="46" width="8" height="16" rx="4" fill="url(#bodyMetal)" stroke="#9AA3A0" stroke-width="0.8"/>
+            <rect x="108" y="46" width="8" height="16" rx="4" fill="url(#bodyMetal)" stroke="#9AA3A0" stroke-width="0.8"/>
+
+            <circle cx="20" cy="70" r="2" fill="#F2C230" opacity="0.7">
+              <animate attributeName="cy" values="70;60;70" dur="3.4s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="0.7;0.1;0.7" dur="3.4s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="118" cy="66" r="1.6" fill="#F2C230" opacity="0.6">
+              <animate attributeName="cy" values="66;54;66" dur="4s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="0.6;0.05;0.6" dur="4s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="104" cy="20" r="1.4" fill="#1F7A52" opacity="0.6">
+              <animate attributeName="cy" values="20;10;20" dur="3s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="0.6;0.05;0.6" dur="3s" repeatCount="indefinite"/>
+            </circle>
+
+            <text x="70" y="106" font-family="Baloo 2, sans-serif" font-size="7" font-weight="700" letter-spacing="2" fill="#0E4A36" text-anchor="middle" opacity="0.55">CH · UNIT</text>
+          </svg>
+        </div>
+        <div class="robot-txt">
+          <div class="robot-name">⚡ ASISTENTE CH · NEXT-GEN</div>
+          <div class="robot-title disp">Soy CH, tu asistente digital</div>
+          <div class="robot-sub">Acompaño el registro de Triaje, la validación SISFOH y cada carpeta de atención para que nadie se pierda en el camino.</div>
+        </div>
+      </div>
+
+      <div class="stats-grid" id="stats-grid"></div>
+
+      <div class="card lock-note">
+        <div style="font-size:18px">🔒</div>
+        <div class="txt">Ninguna carpeta de servicio (optometría, odontología, vacunas, etc.) atenderá a un paciente si su DNI no tiene <b>Triaje</b> completo. El DNI es la llave que da acceso. El paso por SISFOH queda registrado automáticamente al completar el Triaje.</div>
+      </div>
+    </div>
+
+    <div class="tabpanel" id="panel-triaje">
+      <div class="card form-card">
+        <div class="form-title disp">Estación de Triaje</div>
+        <div class="form-sub">Registra los datos básicos del paciente.</div>
+        <form class="form-col" id="form-triaje">
+          <div class="field-wrap"><span class="field-ico">🪪</span><input class="input" id="t-dni" placeholder="DNI (8 dígitos)" maxlength="8" inputmode="numeric"></div>
+          <div class="field-wrap"><span class="field-ico">👤</span><input class="input" id="t-apellido" placeholder="Apellidos y nombres completos"></div>
+          <div class="field-wrap"><span class="field-ico">📅</span><input class="input" id="t-edad" placeholder="Edad" maxlength="3" inputmode="numeric"></div>
+          <div class="field-wrap"><span class="field-ico">📞</span><input class="input" id="t-telefono" placeholder="Teléfono" maxlength="9" inputmode="numeric"></div>
+          <div class="row-gap">
+            <div class="field-wrap"><span class="field-ico">⚖️</span><input class="input" id="t-peso" placeholder="Peso (kg)" maxlength="5" inputmode="decimal"></div>
+            <div class="field-wrap"><span class="field-ico">📏</span><input class="input" id="t-talla" placeholder="Talla (m) ej. 1.47" maxlength="4" inputmode="decimal"></div>
+          </div>
+          <div id="t-imc"></div>
+          <div class="field-wrap"><span class="field-ico">🫀</span><input class="input" id="t-presion" placeholder="Presión arterial (ej. 120/80)" maxlength="7"></div>
+          <button class="btn-primary" type="submit">Registrar en Triaje</button>
+        </form>
+        <div id="t-msg"></div>
+      </div>
+    </div>
+
+    <div class="tabpanel" id="panel-servicios">
+      <div id="svc-panel-wrap"></div>
+      <div class="servicios-grid" id="servicios-grid"></div>
+    </div>
+
+    <div class="tabpanel" id="panel-sorteo">
+      <div class="card sorteo-card">
+        <div class="form-title disp">🎡 Sorteo de pacientes</div>
+        <div class="form-sub">Gira la rueda para elegir un paciente al azar entre todos los registrados.</div>
+        <div class="ruleta-wrap">
+          <div class="ruleta-rim" id="ruleta-rim"></div>
+          <div class="ruleta-puntero-wrap">
+            <div class="ruleta-puntero"></div>
+            <div class="ruleta-puntero-pin"></div>
+          </div>
+          <div class="ruleta-disco" id="ruleta-disco"></div>
+          <div class="ruleta-centro" onclick="girarRuleta()"><span>GIRAR</span></div>
+        </div>
+        <div class="ruleta-stand"></div>
+        <div class="ruleta-base"></div>
+        <div class="sorteo-count" id="sorteo-count"></div>
+        <div id="winner-box-wrap"></div>
+        <div class="sorteo-list" id="sorteo-list"></div>
+        <div class="row-gap" style="justify-content:center; margin-top:14px;">
+          <button class="trash-btn" onclick="resetSorteo()" title="Restablecer participantes">🔄 Restablecer participantes</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tabpanel" id="panel-resumen">
+      <div class="resumen-top">
+        <div class="field-wrap"><span class="field-ico">🔎</span><input class="input" id="filtro" placeholder="Buscar por DNI o apellido" oninput="renderResumen()"></div>
+        <button class="trash-btn" onclick="exportExcel()" title="Descargar en Excel" style="color:#0E4A36;">📥</button>
+        <button class="trash-btn" onclick="vaciarTodo()" title="Borrar todos los registros">🗑️</button>
+      </div>
+      <div class="card table-wrap">
+        <table class="res" id="tabla-resumen"></table>
+      </div>
+    </div>
+
+    <div class="footer-note" id="footer-note-humano">Datos guardados solo en esta pestaña del navegador (se pierden al cerrar). Para producción, conviene un backend compartido.</div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+</div><!-- /app-humano -->
+
+<div id="app-veterinaria" style="display:none;">
+
+<div class="header">
+  <div class="header-row">
+    <div class="h-left">
+      <div class="logo-img" style="display:flex;align-items:center;justify-content:center;font-size:24px;">🐶</div>
+      <div>
+        <div class="h-title disp">Campaña Veterinaria</div>
+        <div class="h-sub">Municipalidad Distrital de Lurigancho</div>
+      </div>
+    </div>
+    <div style="display:flex; gap:8px;">
+      <button class="back-btn" onclick="goLanding()" title="Volver al inicio">⬅ Portal</button>
+      <button class="refresh-btn" onclick="renderAllVet()" title="Actualizar vista">⟳</button>
+    </div>
+  </div>
+</div>
+
+<div class="app-layout">
+
+  <div class="sidebar" id="sidebar-vet"></div>
+
+  <div class="content">
+
+    <div class="tabpanel" id="vpanel-inicio">
+      <div class="card robot-card">
+        <div class="robot-svg-wrap">
+          <div style="width:100px;height:112px;display:flex;align-items:center;justify-content:center;font-size:64px;">🐾</div>
+        </div>
+        <div class="robot-txt">
+          <div class="robot-name">⚡ ASISTENTE CH · VETERINARIA</div>
+          <div class="robot-title disp">Soy CH, tu asistente digital</div>
+          <div class="robot-sub">Acompaño el Registro del dueño y su mascota, y la atención veterinaria para que nadie se pierda en el camino.</div>
+        </div>
+      </div>
+
+      <div class="stats-grid" id="vstats-grid"></div>
+
+      <div class="card lock-note">
+        <div style="font-size:18px">🔒</div>
+        <div class="txt">La <b>Atención Veterinaria</b> no se realizará a ningún dueño si su DNI no tiene <b>Registro</b> completo. El DNI del dueño es la llave de acceso. El paso por SISFOH queda registrado automáticamente al completar el Registro.</div>
+      </div>
+    </div>
+
+    <div class="tabpanel" id="vpanel-registro">
+      <div class="card form-card">
+        <div class="form-title disp">Registro del Dueño y la Mascota</div>
+        <div class="form-sub">Registra los datos básicos del dueño y de su mascota.</div>
+        <form class="form-col" id="form-vregistro">
+          <div style="font-size:12.5px;font-weight:800;color:#8A8478;margin-top:2px;">DATOS DEL DUEÑO</div>
+          <div class="field-wrap"><span class="field-ico">🪪</span><input class="input" id="v-dni" placeholder="N.° DNI (8 dígitos)" maxlength="8" inputmode="numeric"></div>
+          <div class="field-wrap"><span class="field-ico">👤</span><input class="input" id="v-nombre" placeholder="Nombres y apellidos"></div>
+          <div class="field-wrap"><span class="field-ico">📞</span><input class="input" id="v-celular" placeholder="Celular" maxlength="9" inputmode="numeric"></div>
+
+          <div style="font-size:12.5px;font-weight:800;color:#8A8478;margin-top:10px;">DATOS DE LA MASCOTA</div>
+          <div id="mascotas-container"></div>
+          <button type="button" class="btn-add-mascota" onclick="agregarMascotaBlock()"><span class="plus-circle">+</span> Agregar otra mascota</button>
+
+          <button class="btn-primary" type="submit">💾 Guardar</button>
+        </form>
+        <div id="v-msg"></div>
+      </div>
+    </div>
+
+    <div class="tabpanel" id="vpanel-atencion">
+      <div class="card svc-panel" style="max-width:520px;">
+        <div class="svc-head"><span class="ico">🩹</span><span class="name disp">Atención Veterinaria</span></div>
+        <div class="svc-sub">Ingresa el DNI del dueño para registrar la atención de su mascota.</div>
+        <div class="row-gap">
+          <div class="field-wrap"><span class="field-ico">🪪</span><input class="input" id="vatn-dni" placeholder="DNI del dueño (8 dígitos)" maxlength="8" inputmode="numeric"></div>
+          <button class="btn-primary" onclick="lookupVetAtencion()">🔎</button>
+        </div>
+        <div id="vatn-result"></div>
+      </div>
+    </div>
+
+    <div class="tabpanel" id="vpanel-sorteo">
+      <div class="card sorteo-card">
+        <div class="form-title disp">🎡 Sorteo de mascotas</div>
+        <div class="form-sub">Gira la rueda para elegir una mascota al azar entre todas las registradas.</div>
+        <div class="ruleta-wrap">
+          <div class="ruleta-rim" id="vruleta-rim"></div>
+          <div class="ruleta-puntero-wrap">
+            <div class="ruleta-puntero"></div>
+            <div class="ruleta-puntero-pin"></div>
+          </div>
+          <div class="ruleta-disco" id="vruleta-disco"></div>
+          <div class="ruleta-centro" onclick="girarRuletaVet()"><span>GIRAR</span></div>
+        </div>
+        <div class="ruleta-stand"></div>
+        <div class="ruleta-base"></div>
+        <div class="sorteo-count" id="vsorteo-count"></div>
+        <div id="vwinner-box-wrap"></div>
+        <div class="sorteo-list" id="vsorteo-list"></div>
+        <div class="row-gap" style="justify-content:center; margin-top:14px;">
+          <button class="trash-btn" onclick="resetSorteoVet()" title="Restablecer participantes">🔄 Restablecer participantes</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tabpanel" id="vpanel-resumen">
+      <div class="resumen-top">
+        <div class="field-wrap"><span class="field-ico">🔎</span><input class="input" id="vfiltro" placeholder="Buscar por DNI o dueño" oninput="renderResumenVet()"></div>
+        <button class="trash-btn" onclick="exportExcelVet()" title="Descargar en Excel" style="color:#0E4A36;">📥</button>
+        <button class="trash-btn" onclick="vaciarTodoVet()" title="Borrar todos los registros">🗑️</button>
+      </div>
+      <div class="card table-wrap">
+        <table class="res" id="vtabla-resumen"></table>
+      </div>
+    </div>
+
+    <div class="footer-note" id="footer-note-vet">Datos guardados solo en esta pestaña del navegador (se pierden al cerrar). Para producción, conviene un backend compartido.</div>
+  </div>
+</div>
+
+<div class="toast" id="toast-vet"></div>
+
+<div class="ficha-overlay" id="ficha-overlay" onclick="if(event.target===this) closeFichaVet()">
+  <div class="carnet-wrap">
+    <div class="ficha-close-wrap"><button class="ficha-close" onclick="closeFichaVet()">✕</button></div>
+    <div class="carnet-card" id="ficha-card"></div>
+    <button class="carnet-download-btn" id="carnet-download-btn" onclick="descargarFichaVet()">📥 Descargar ficha</button>
+  </div>
+</div>
+
+</div><!-- /app-veterinaria -->
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+/* =========================================================
+   🔥 CONFIGURACIÓN DE FIREBASE — PEGA AQUÍ TUS DATOS
+   Consola de Firebase → ⚙️ Configuración del proyecto →
+   "Tus apps" → Configuración del SDK → Config
+========================================================= */
+const firebaseConfig = {
+  apiKey: "AIzaSyCi1FBmydsL9ItbMtSdM1bgDJbdT_WsZbY",
+  authDomain: "campana-4d59e.firebaseapp.com",
+  projectId: "campana-4d59e",
+  storageBucket: "campana-4d59e.firebasestorage.app",
+  messagingSenderId: "504370545099",
+  appId: "1:504370545099:web:6404e8ca86096e98d8364e"
+};
+
+let USE_FIREBASE = false;
+let db, colHumano, colVet;
+try {
+  if (typeof firebase !== "undefined" && firebaseConfig.apiKey && !firebaseConfig.apiKey.includes("PEGA_AQUI")) {
+    firebase.initializeApp(firebaseConfig);
+    db = firebase.firestore();
+    colHumano = db.collection("campana_salud_pacientes");
+    colVet = db.collection("campana_salud_veterinaria");
+    USE_FIREBASE = true;
+  }
+} catch (e) {
+  console.error("No se pudo conectar a Firebase:", e);
+  USE_FIREBASE = false;
+}
+
+function marcarEstadoConexion() {
+  const msg = USE_FIREBASE
+    ? "☁️ Datos guardados en Firebase (persisten al recargar)."
+    : "⚠️ Firebase no está configurado: los datos se perderán al recargar. Revisa firebaseConfig en el código.";
+  const f1 = document.getElementById("footer-note-humano");
+  const f2 = document.getElementById("footer-note-vet");
+  if (f1) f1.textContent = msg;
+  if (f2) f2.textContent = msg;
+}
+
+const SERVICES = [
+  { key: "optometria", label: "Optometría", ico: "👁️", color: "#2C3E50" },
+  { key: "podologia", label: "Podología", ico: "🦶", color: "#34524A" },
+  { key: "obstetricia", label: "Obstetricia", ico: "🤰", color: "#5C4B51" },
+  { key: "nutricion", label: "Nutrición", ico: "🍎", color: "#3F5D3A" },
+  { key: "corte", label: "Corte de cabello", ico: "✂️", color: "#463F5C" },
+  { key: "caritas", label: "Caritas pintadas", ico: "🎨", color: "#6B5B2E" },
+  { key: "odontologia", label: "Odontología", ico: "🦷", color: "#445566" },
+  { key: "vacunas", label: "Vacunas", ico: "💉", color: "#1F6F4F" },
+  { key: "medicina", label: "Medicina general", ico: "🩺", color: "#2E4756" },
+  { key: "neurologia", label: "Neurología", ico: "🧠", color: "#4B3F72" },
+  { key: "productos", label: "Venta de productos", ico: "🛍️", color: "#55524A" },
+];
+const TABS = [
+  { key: "inicio", label: "Inicio", ico: "🏠" },
+  { key: "triaje", label: "Triaje", ico: "📋" },
+  { key: "servicios", label: "Carpetas", ico: "🗂️" },
+  { key: "sorteo", label: "Sortear", ico: "🎡" },
+  { key: "resumen", label: "Resumen", ico: "📊" },
+];
+
+let patients = {};
+let currentTab = "inicio";
+let currentService = null;
+let sisfohEstado = "si";
+let svcResult = null;
+
+function now() {
+  const d = new Date();
+  return d.toLocaleString("es-PE", { hour: "2-digit", minute: "2-digit", day: "2-digit", month: "2-digit" });
+}
+function emptyServices() {
+  const o = {};
+  SERVICES.forEach(s => o[s.key] = { done: false, at: null });
+  return o;
+}
+function onlyDigitsOrText(v) {
+  return v.replace(/[^\d\wÁÉÍÓÚáéíóúÑñ .\/-]/g, "");
+}
+function showToast(text, kind) {
+  const t = document.getElementById("toast");
+  t.textContent = text;
+  t.className = "toast" + (kind === "error" ? " error" : "");
+  t.style.display = "block";
+  setTimeout(() => t.style.display = "none", 3200);
+}
+
+// ---------- SIDEBAR NAV ----------
+function buildSidebar() {
+  const bar = document.getElementById("sidebar");
+  bar.innerHTML = TABS.map((t, i) => `
+    <button class="side-btn${t.key === currentTab ? " active" : ""}" onclick="switchTab('${t.key}')">
+      <span class="ico">${t.ico}</span>${t.label}
+      <span class="mini-ch" style="animation-delay:${(i * 0.15).toFixed(2)}s"></span>
+    </button>`).join("") + `
+    <div class="sidebar-foot">
+      <div class="ch-mini">🤖 CH está activo</div>
+    </div>`;
+}
+let resumenDesbloqueado = false;
+function switchTab(key) {
+  if (key === "resumen" && !resumenDesbloqueado) {
+    mostrarModalClave(
+      "Resumen protegido",
+      "Estos son datos privados de pacientes. Ingresa la clave para verlos.",
+      "alvaro",
+      () => { resumenDesbloqueado = true; irATab("resumen"); }
+    );
+    return;
+  }
+  irATab(key);
+}
+function irATab(key) {
+  currentTab = key;
+  document.querySelectorAll(".tabpanel").forEach(p => p.classList.remove("active"));
+  document.getElementById("panel-" + key).classList.add("active");
+  buildSidebar();
+  if (key === "resumen") renderResumen();
+  if (key === "servicios") renderServiciosGrid();
+  if (key === "inicio") renderStats();
+  if (key === "sorteo") renderSorteo();
+}
+
+// ---------- INICIO ----------
+function renderStats() {
+  const list = Object.values(patients);
+  const total = list.length;
+  const validados = list.filter(p => p.triajeOk && p.sisfohOk).length;
+  const atenciones = list.reduce((acc, p) => acc + SERVICES.filter(s => p.services?.[s.key]?.done).length, 0);
+  const el = document.getElementById("stats-grid");
+  el.innerHTML = `
+    <div class="card stat-card"><div class="stat-value disp" style="color:#2E4756">${total}</div><div class="stat-label">Registrados</div></div>
+    <div class="card stat-card"><div class="stat-value disp" style="color:#2E7D4F">${validados}</div><div class="stat-label">Validados</div></div>
+    <div class="card stat-card"><div class="stat-value disp" style="color:#C98A12">${atenciones}</div><div class="stat-label">Atenciones</div></div>
+  `;
+}
+
+// ---------- IMC (índice de masa corporal) ----------
+function calcIMC(pesoKg, tallaCm) {
+  const peso = parseFloat(pesoKg);
+  const talla = parseFloat(tallaCm);
+  if (!peso || !talla) return null;
+  const tallaM = talla;
+  const valor = peso / (tallaM * tallaM);
+  let categoria, kind;
+  if (valor < 18.5) { categoria = "Bajo peso"; kind = "error"; }
+  else if (valor < 25) { categoria = "Normal"; kind = "ok"; }
+  else if (valor < 30) { categoria = "Sobrepeso"; kind = "error"; }
+  else { categoria = "Obesidad"; kind = "error"; }
+  return { valor: valor.toFixed(1), categoria, kind };
+}
+function actualizarIMCPreview() {
+  const peso = document.getElementById("t-peso").value.trim();
+  const talla = document.getElementById("t-talla").value.trim();
+  const el = document.getElementById("t-imc");
+  const r = calcIMC(peso, talla);
+  if (!r) { el.innerHTML = ""; return; }
+  el.innerHTML = `<div class="msg-box msg-${r.kind}">IMC: <b>${r.valor}</b> · ${r.categoria} (calculado automáticamente)</div>`;
+}
+document.getElementById("t-peso").addEventListener("input", actualizarIMCPreview);
+document.getElementById("t-talla").addEventListener("input", actualizarIMCPreview);
+
+// ---------- TRIAJE ----------
+document.getElementById("form-triaje").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const dni = document.getElementById("t-dni").value.trim();
+  const apellido = document.getElementById("t-apellido").value.trim();
+  const edad = document.getElementById("t-edad").value.trim();
+  const telefono = document.getElementById("t-telefono").value.trim();
+  const peso = document.getElementById("t-peso").value.trim();
+  const talla = document.getElementById("t-talla").value.trim();
+  const presion = document.getElementById("t-presion").value.trim();
+  const msgEl = document.getElementById("t-msg");
+
+  if (!/^\d{8}$/.test(dni)) return setMsg(msgEl, "error", "El DNI debe tener 8 dígitos.");
+  if (!apellido) return setMsg(msgEl, "error", "Ingresa apellidos y nombres completos.");
+  if (!edad || isNaN(Number(edad))) return setMsg(msgEl, "error", "Ingresa una edad válida.");
+  if (!telefono) return setMsg(msgEl, "error", "Ingresa un teléfono.");
+  if (!peso || isNaN(Number(peso))) return setMsg(msgEl, "error", "Ingresa un peso válido (kg).");
+  if (!talla || isNaN(Number(talla))) return setMsg(msgEl, "error", "Ingresa una talla válida (cm).");
+  if (!presion) return setMsg(msgEl, "error", "Ingresa la presión arterial.");
+
+  const imc = calcIMC(peso, talla);
+  const existing = patients[dni] || { services: emptyServices() };
+  const nuevo = {
+    ...existing, dni, apellido, edad, telefono, peso, talla,
+    imc: imc ? imc.valor : "", imcCategoria: imc ? imc.categoria : "",
+    presion, triajeOk: true, triajeAt: now(), services: existing.services || emptyServices(),
+    sisfohOk: true, sisfohEstado: existing.sisfohEstado || "si", sisfohAt: now(),
+  };
+  patients[dni] = nuevo;
+  if (USE_FIREBASE) colHumano.doc(dni).set(nuevo).catch(err => showToast("Error al guardar en Firebase: " + err.message, "error"));
+
+  setMsg(msgEl, "ok", `Registrado: ${apellido} (DNI ${dni}). IMC ${imc ? imc.valor + " · " + imc.categoria : "-"}. Ya puede pasar a las carpetas de servicio.`);
+  document.getElementById("form-triaje").reset();
+  document.getElementById("t-imc").innerHTML = "";
+  renderAll();
+});
+
+function setMsg(el, kind, text) {
+  el.innerHTML = `<div class="msg-box msg-${kind}">${text}</div>`;
+}
+
+// ---------- SERVICIOS ----------
+function renderServiciosGrid() {
+  const grid = document.getElementById("servicios-grid");
+  const list = Object.values(patients);
+  grid.innerHTML = SERVICES.map(s => {
+    const doneCount = list.filter(p => p.services?.[s.key]?.done).length;
+    return `
+      <button class="folder${currentService === s.key ? " selected" : ""}" onclick="selectService('${s.key}')">
+        <div class="page p1"></div>
+        <div class="page p2"></div>
+        <div class="tab-piece" style="background:${s.color}"></div>
+        <div class="body" style="background:${s.color}">
+          <div class="sheen"></div>
+          ${currentService === s.key ? '<div class="check-badge">✓</div>' : ""}
+          <div class="ico">${s.ico}</div>
+          <div>
+            <div class="flabel">${s.label}</div>
+            <div class="fcount">${doneCount} atendidos</div>
+          </div>
+        </div>
+      </button>`;
+  }).join("");
+  renderSvcPanel();
+}
+function selectService(key) {
+  currentService = key;
+  svcResult = null;
+  renderServiciosGrid();
+}
+function renderSvcPanel() {
+  const wrap = document.getElementById("svc-panel-wrap");
+  if (!currentService) {
+    wrap.innerHTML = `<div class="placeholder-txt">Selecciona una carpeta arriba para empezar a atender.</div>`;
+    return;
+  }
+  const svc = SERVICES.find(s => s.key === currentService);
+  let resultHtml = "";
+  if (svcResult?.kind === "blocked") {
+    const p = svcResult.p;
+    resultHtml = `
+      <div class="block-box">
+        <div class="block-header">
+          <div class="icow">⛔</div>
+          <div class="txt">${svcResult.text}</div>
+        </div>
+        ${p ? `
+        <div class="status-pills">
+          <div class="status-pill ${p.triajeOk ? "pill-ok" : "pill-bad"}">🩺 TRIAJE<br>${p.triajeOk ? "✓ LISTO" : "✕ FALTA"}</div>
+        </div>` : ""}
+      </div>`;
+  } else if (svcResult?.kind === "error") {
+    resultHtml = `<div class="msg-box msg-error">${svcResult.text}</div>`;
+  } else if (svcResult?.kind === "found") {
+    const p = svcResult.p;
+    const done = p.services?.[currentService]?.done;
+    resultHtml = `
+      <div class="found-box">
+        <div class="found-name">${p.apellido}</div>
+        <div class="found-meta">DNI ${p.dni} · ${p.edad} años · ${p.telefono}${p.imc ? ` · IMC ${p.imc} (${p.imcCategoria})` : ""}${p.presion ? ` · PA ${p.presion}` : ""}</div>
+        ${done
+          ? `<div class="pill-done">✓ Atendido a las ${p.services[currentService].at}</div>`
+          : `<button class="btn-primary" onclick="marcarAtendido()">Marcar como atendido</button>`}
+      </div>`;
+  }
+  wrap.innerHTML = `
+    <div class="card svc-panel">
+      <div class="svc-head"><span class="ico">${svc.ico}</span><span class="name disp">${svc.label}</span></div>
+      <div class="svc-sub">Ingresa el DNI del paciente para atenderlo.</div>
+      <div class="row-gap">
+        <div class="field-wrap"><span class="field-ico">🪪</span><input class="input" id="svc-dni" placeholder="DNI (8 dígitos)" maxlength="8" inputmode="numeric"></div>
+        <button class="btn-primary" onclick="lookupService()">🔎</button>
+      </div>
+      <div id="svc-result">${resultHtml}</div>
+    </div>`;
+}
+function lookupService() {
+  const dni = document.getElementById("svc-dni").value.trim();
+  if (!/^\d{8}$/.test(dni)) { svcResult = { kind: "error", text: "Ingresa un DNI válido de 8 dígitos." }; renderSvcPanel(); playDenySound(); return; }
+  const p = patients[dni];
+  if (!p || !p.triajeOk) {
+    svcResult = { kind: "blocked", text: "Este paciente no puede ser atendido: falta completar Triaje.", p: p || null };
+    renderSvcPanel();
+    playDenySound();
+    return;
+  } else {
+    svcResult = { kind: "found", p };
+  }
+  renderSvcPanel();
+}
+function marcarAtendido() {
+  if (!svcResult || svcResult.kind !== "found" || !currentService) return;
+  const p = patients[svcResult.p.dni];
+  p.services[currentService] = { done: true, at: now() };
+  if (USE_FIREBASE) colHumano.doc(p.dni).set(p).catch(err => showToast("Error al guardar en Firebase: " + err.message, "error"));
+  svcResult = { kind: "found", p };
+  renderSvcPanel();
+  renderServiciosGrid();
+  showToast("Atención registrada ✓");
+}
+
+// ---------- RESUMEN ----------
+function renderResumen() {
+  const filtro = (document.getElementById("filtro")?.value || "").trim().toLowerCase();
+  const list = Object.values(patients).filter(p => !filtro || p.dni.includes(filtro) || (p.apellido || "").toLowerCase().includes(filtro));
+  const table = document.getElementById("tabla-resumen");
+  const headCols = ["DNI", "Apellidos y Nombres", "Edad", "Teléfono", "Peso (kg)", "Talla (m)", "IMC", "Presión Arterial", "Triaje", "SISFOH", ...SERVICES.map(s => s.label)];
+  let html = `<thead><tr>${headCols.map(h => `<th>${h}</th>`).join("")}</tr></thead><tbody>`;
+  if (list.length === 0) {
+    html += `<tr><td colspan="${headCols.length}" style="text-align:center;color:#8A8478;padding:20px;">Sin registros todavía.</td></tr>`;
+  } else {
+    list.forEach(p => {
+      html += `<tr>
+        <td>${p.dni}</td><td>${p.apellido}</td><td>${p.edad}</td><td>${p.telefono}</td>
+        <td>${p.peso || "—"}</td><td>${p.talla || "—"}</td>
+        <td>${p.imc ? `${p.imc} (${p.imcCategoria})` : "—"}</td><td>${p.presion || "—"}</td>
+        <td>${p.triajeOk ? '<span class="ok-ico">✓</span>' : '<span class="no-ico">✕</span>'}</td>
+        <td>${p.sisfohOk ? '<span class="ok-ico">✓</span>' : '<span class="no-ico">✕</span>'}</td>
+        ${SERVICES.map(s => `<td>${p.services?.[s.key]?.done ? `<span style="color:${s.color}">✓</span>` : '<span class="dash">—</span>'}</td>`).join("")}
+      </tr>`;
+    });
+  }
+  html += "</tbody>";
+  table.innerHTML = html;
+}
+async function vaciarTodo() {
+  if (!confirm("¿Borrar todos los registros? Esta acción no se puede deshacer.")) return;
+  patients = {};
+  if (USE_FIREBASE) {
+    try {
+      const snap = await colHumano.get();
+      const batch = db.batch();
+      snap.forEach(d => batch.delete(d.ref));
+      await batch.commit();
+    } catch (err) { showToast("Error al borrar en Firebase: " + err.message, "error"); }
+  }
+  renderAll();
+  showToast("Se borraron todos los registros.");
+}
+
+function exportExcel() {
+  const filtro = (document.getElementById("filtro")?.value || "").trim().toLowerCase();
+  const list = Object.values(patients).filter(p => !filtro || p.dni.includes(filtro) || (p.apellido || "").toLowerCase().includes(filtro));
+  if (list.length === 0) { showToast("No hay registros para descargar.", "error"); return; }
+
+  const rows = list.map(p => {
+    const row = {
+      "DNI": p.dni,
+      "Apellidos y Nombres": p.apellido,
+      "Edad": p.edad,
+      "Teléfono": p.telefono,
+      "Peso (kg)": p.peso || "",
+      "Talla (m)": p.talla || "",
+      "IMC": p.imc || "",
+      "Categoría IMC": p.imcCategoria || "",
+      "Presión Arterial": p.presion || "",
+      "Triaje": p.triajeOk ? "Sí" : "No",
+      "SISFOH": p.sisfohOk ? "Sí" : "No",
+    };
+    SERVICES.forEach(s => { row[s.label] = p.services?.[s.key]?.done ? "Sí" : "No"; });
+    return row;
+  });
+
+  if (typeof XLSX === "undefined") { showToast("No se pudo cargar Excel. Revisa tu conexión.", "error"); return; }
+  const ws = XLSX.utils.json_to_sheet(rows);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Resumen");
+  const fecha = new Date().toISOString().slice(0, 10);
+  XLSX.writeFile(wb, `resumen_campana_${fecha}.xlsx`);
+  showToast("Excel descargado ✓");
+}
+
+// ---------- SONIDO DE ACCESO DENEGADO ----------
+function playDenySound() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const playTone = (freq, start, dur) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "square";
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.001, ctx.currentTime + start);
+      gain.gain.exponentialRampToValueAtTime(0.18, ctx.currentTime + start + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + start + dur);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start(ctx.currentTime + start);
+      osc.stop(ctx.currentTime + start + dur + 0.02);
+    };
+    playTone(392, 0, 0.14);
+    playTone(261, 0.16, 0.22);
+  } catch (e) { /* audio not available, ignore */ }
+}
+
+// ---------- FIELD INPUT SANITIZE ----------
+document.addEventListener("input", function(e) {
+  if (e.target.matches(".input") && e.target.id !== "filtro") {
+    e.target.value = onlyDigitsOrText(e.target.value);
+  }
+});
+
+// ---------- SORTEO (RULETA) ----------
+let sorteoExcluidos = new Set();
+let sorteoRotacionActual = 0;
+let sorteoGirando = false;
+let sorteoBulbInterval = null;
+const SORTEO_COLORS = ["#0E4A36", "#1F7A52", "#2C3E50", "#6B5B2E", "#4B3F72", "#2E4756", "#5C4B51", "#3F5D3A", "#445566", "#463F5C", "#34524A", "#55524A"];
+const RULETA_N_BULBS = 28;
+
+function getParticipantesSorteo() {
+  return Object.values(patients).filter(p => !sorteoExcluidos.has(p.dni));
+}
+
+function initRuletaBulbs() {
+  const rim = document.getElementById("ruleta-rim");
+  if (!rim || rim.dataset.built) return;
+  rim.dataset.built = "1";
+  const size = rim.clientWidth || 296;
+  const cx = size / 2, cy = size / 2, radius = size / 2 - 9;
+  for (let i = 0; i < RULETA_N_BULBS; i++) {
+    const ang = (i / RULETA_N_BULBS) * Math.PI * 2;
+    const x = cx + radius * Math.cos(ang) - 3.5;
+    const y = cy + radius * Math.sin(ang) - 3.5;
+    const bulb = document.createElement("div");
+    bulb.className = "ruleta-bulb";
+    bulb.style.left = x + "px";
+    bulb.style.top = y + "px";
+    rim.appendChild(bulb);
+  }
+}
+
+function renderSorteo() {
+  const disco = document.getElementById("ruleta-disco");
+  if (!disco) return;
+  initRuletaBulbs();
+  const participantes = getParticipantesSorteo();
+  const n = participantes.length;
+  const countEl = document.getElementById("sorteo-count");
+  const listEl = document.getElementById("sorteo-list");
+  countEl.textContent = n === 0 ? "No hay participantes registrados." : `${n} participante${n === 1 ? "" : "s"} en la rueda`;
+
+  if (n === 0) {
+    disco.style.background = "#E4E0D3";
+    listEl.innerHTML = `<div style="text-align:center;color:#B7B09E;">Registra pacientes en Triaje para poder sortear.</div>`;
+    return;
+  }
+  const slice = 360 / n;
+  const dividerWidth = Math.min(1.6, slice * 0.12);
+  const gradientParts = [];
+  participantes.forEach((p, i) => {
+    const color = SORTEO_COLORS[i % SORTEO_COLORS.length];
+    const start = i * slice;
+    const end = (i + 1) * slice;
+    gradientParts.push(`${color} ${start.toFixed(2)}deg ${(end - dividerWidth).toFixed(2)}deg`);
+    gradientParts.push(`rgba(255,255,255,0.55) ${(end - dividerWidth).toFixed(2)}deg ${end.toFixed(2)}deg`);
+  });
+  disco.style.background = `conic-gradient(${gradientParts.join(", ")})`;
+  listEl.innerHTML = participantes.map((p, i) => `<div>${i + 1}. ${p.apellido} <span style="color:#B7B09E;">· DNI ${p.dni}</span></div>`).join("");
+}
+
+function girarRuleta() {
+  if (sorteoGirando) return;
+  const participantes = getParticipantesSorteo();
+  if (participantes.length === 0) { showToast("No hay participantes para sortear.", "error"); return; }
+
+  sorteoGirando = true;
+  document.getElementById("winner-box-wrap").innerHTML = "";
+
+  const n = participantes.length;
+  const winnerIndex = Math.floor(Math.random() * n);
+  const slice = 360 / n;
+  const winnerMidAngle = winnerIndex * slice + slice / 2;
+  const extraSpins = 6;
+  const jitter = (Math.random() * slice * 0.6) - (slice * 0.3);
+  const targetRotation = sorteoRotacionActual + extraSpins * 360 + (360 - winnerMidAngle) + jitter;
+  sorteoRotacionActual = targetRotation;
+
+  document.getElementById("ruleta-disco").style.transform = `rotate(${targetRotation}deg)`;
+  playSpinSound();
+
+  const bulbs = document.querySelectorAll("#ruleta-rim .ruleta-bulb");
+  let flip = false;
+  clearInterval(sorteoBulbInterval);
+  sorteoBulbInterval = setInterval(() => {
+    flip = !flip;
+    bulbs.forEach((b, i) => b.classList.toggle("off", (i % 2 === 0) === flip));
+  }, 110);
+
+  setTimeout(() => {
+    sorteoGirando = false;
+    clearInterval(sorteoBulbInterval);
+    bulbs.forEach(b => b.classList.remove("off"));
+    mostrarGanador(participantes[winnerIndex]);
+  }, 4300);
+}
+
+function mostrarGanador(p) {
+  const wrap = document.getElementById("winner-box-wrap");
+  wrap.innerHTML = `
+    <div class="winner-box">
+      <div class="label">🎉 GANADOR DEL SORTEO</div>
+      <div class="name">${p.apellido}</div>
+      <div class="meta">DNI ${p.dni}${p.edad ? " · " + p.edad + " años" : ""}</div>
+      <div class="winner-actions">
+        <button class="btn-primary" style="background:#F2C230; color:#123B2C;" onclick="excluirGanador('${p.dni}')">Quitar de la rueda</button>
+      </div>
+    </div>`;
+  playFanfareSound();
+}
+
+function excluirGanador(dni) {
+  sorteoExcluidos.add(dni);
+  document.getElementById("winner-box-wrap").innerHTML = "";
+  renderSorteo();
+  showToast("Ganador retirado de la rueda para el próximo sorteo.");
+}
+
+function resetSorteo() {
+  sorteoExcluidos.clear();
+  document.getElementById("winner-box-wrap").innerHTML = "";
+  renderSorteo();
+  showToast("Lista de participantes restablecida.");
+}
+
+function playSpinSound() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    let t = 0;
+    for (let i = 0; i < 14; i++) {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "square";
+      osc.frequency.value = 700;
+      gain.gain.setValueAtTime(0.001, ctx.currentTime + t);
+      gain.gain.exponentialRampToValueAtTime(0.08, ctx.currentTime + t + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + t + 0.05);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start(ctx.currentTime + t);
+      osc.stop(ctx.currentTime + t + 0.06);
+      t += 0.09 + i * 0.02;
+    }
+  } catch (e) { /* audio not available, ignore */ }
+}
+
+function playFanfareSound() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const notes = [523, 659, 784, 1047];
+    notes.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "triangle";
+      osc.frequency.value = freq;
+      const start = i * 0.14;
+      gain.gain.setValueAtTime(0.001, ctx.currentTime + start);
+      gain.gain.exponentialRampToValueAtTime(0.18, ctx.currentTime + start + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + start + 0.32);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start(ctx.currentTime + start);
+      osc.stop(ctx.currentTime + start + 0.34);
+    });
+  } catch (e) { /* audio not available, ignore */ }
+}
+
+// ---------- MASTER RENDER ----------
+function renderAll() {
+  buildSidebar();
+  renderStats();
+  renderServiciosGrid();
+  renderResumen();
+  renderSorteo();
+}
+
+/* =========================================================
+   PORTAL / LANDING NAVIGATION
+========================================================= */
+function mostrarModalClave(titulo, sub, claveEsperada, onSuccess) {
+  const root = document.getElementById("pw-modal-root");
+  root.innerHTML = `
+    <div class="pw-modal-overlay" id="pw-modal-overlay">
+      <div class="pw-modal-card">
+        <div class="pw-icon">🔒</div>
+        <div class="pw-title disp">${titulo}</div>
+        <div class="pw-sub">${sub}</div>
+        <div class="field-wrap"><input class="input" id="pw-modal-input" type="password" placeholder="Clave de acceso" autocomplete="off"></div>
+        <div id="pw-modal-msg"></div>
+        <div class="pw-modal-actions">
+          <button class="pw-cancel-btn" type="button" onclick="cerrarModalClave()">Cancelar</button>
+          <button class="btn-primary" type="button" id="pw-modal-ok">Ingresar</button>
+        </div>
+      </div>
+    </div>`;
+  const input = document.getElementById("pw-modal-input");
+  const msgEl = document.getElementById("pw-modal-msg");
+  function intentar() {
+    if (input.value.trim().toLowerCase() === claveEsperada.toLowerCase()) {
+      cerrarModalClave();
+      onSuccess();
+    } else {
+      msgEl.innerHTML = `<div class="msg-box msg-error">Clave incorrecta.</div>`;
+      input.value = "";
+      input.focus();
+    }
+  }
+  document.getElementById("pw-modal-ok").onclick = intentar;
+  input.addEventListener("keydown", e => { if (e.key === "Enter") intentar(); });
+  setTimeout(() => input.focus(), 50);
+}
+function cerrarModalClave() {
+  document.getElementById("pw-modal-root").innerHTML = "";
+}
+
+function goLanding() {
+  document.getElementById("landing-screen").style.display = "flex";
+  document.getElementById("app-humano").style.display = "none";
+  document.getElementById("app-veterinaria").style.display = "none";
+}
+function openApp(which) {
+  abrirAppReal(which);
+}
+function abrirAppReal(which) {
+  document.getElementById("landing-screen").style.display = "none";
+  if (which === "humano") {
+    document.getElementById("app-humano").style.display = "block";
+    document.getElementById("app-veterinaria").style.display = "none";
+    renderAll();
+  } else {
+    document.getElementById("app-veterinaria").style.display = "block";
+    document.getElementById("app-humano").style.display = "none";
+    renderAllVet();
+  }
+}
+// Reuse the municipal logo already embedded in the human header for the landing screen
+let MUNI_LOGO_SRC = "";
+(function syncLandingLogo() {
+  const src = document.querySelector("#app-humano .logo-img")?.src;
+  if (src) {
+    document.getElementById("landing-logo-img").src = src;
+    MUNI_LOGO_SRC = src;
+  }
+})();
+
+function chSvgMarkup(suffix, size) {
+  return `
+    <svg viewBox="0 0 140 156" width="${size}" height="${(size * 156 / 140).toFixed(0)}" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="ringGlow${suffix}" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0" stop-color="#F2C230" stop-opacity="0.55"/>
+          <stop offset="1" stop-color="#F2C230" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="bodyMetal${suffix}" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#FFFFFF"/>
+          <stop offset="0.5" stop-color="#D7DCDB"/>
+          <stop offset="1" stop-color="#A9B1AF"/>
+        </linearGradient>
+        <linearGradient id="headMetal${suffix}" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#FFFFFF"/>
+          <stop offset="1" stop-color="#C2C9C7"/>
+        </linearGradient>
+        <linearGradient id="visorGlow${suffix}" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#1F7A52"/>
+          <stop offset="0.5" stop-color="#F2C230"/>
+          <stop offset="1" stop-color="#1F7A52"/>
+        </linearGradient>
+        <radialGradient id="coreGlow${suffix}" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0" stop-color="#FFF6D0"/>
+          <stop offset="0.6" stop-color="#F2C230"/>
+          <stop offset="1" stop-color="#B5840F"/>
+        </radialGradient>
+      </defs>
+      <ellipse cx="70" cy="148" rx="52" ry="8" fill="url(#ringGlow${suffix})"/>
+      <ellipse cx="70" cy="148" rx="34" ry="3.2" fill="none" stroke="#F2C230" stroke-width="1" opacity="0.5">
+        <animate attributeName="rx" values="30;36;30" dur="2.6s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.3;0.6;0.3" dur="2.6s" repeatCount="indefinite"/>
+      </ellipse>
+      <path d="M18 138 Q18 96 40 90 L100 90 Q122 96 122 138 Z" fill="url(#bodyMetal${suffix})" stroke="#9AA3A0" stroke-width="1"/>
+      <path d="M40 90 L100 90 Q108 92 112 98 L28 98 Q32 92 40 90 Z" fill="#EDEAE1" opacity="0.5"/>
+      <circle cx="70" cy="114" r="14" fill="none" stroke="#F2C230" stroke-width="1.2" opacity="0.55"/>
+      <circle cx="70" cy="114" r="9.5" fill="url(#coreGlow${suffix})">
+        <animate attributeName="r" values="8.5;10;8.5" dur="1.8s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.85;1;0.85" dur="1.8s" repeatCount="indefinite"/>
+      </circle>
+      <rect x="55" y="76" width="30" height="16" rx="8" fill="url(#bodyMetal${suffix})" stroke="#9AA3A0" stroke-width="1"/>
+      <rect x="34" y="18" width="72" height="62" rx="30" fill="url(#headMetal${suffix})" stroke="#9AA3A0" stroke-width="1"/>
+      <rect x="40" y="24" width="60" height="6" rx="3" fill="#F2C230" opacity="0.35"/>
+      <rect x="44" y="44" width="52" height="12" rx="6" fill="url(#visorGlow${suffix})">
+        <animate attributeName="opacity" values="0.65;1;0.65" dur="2.2s" repeatCount="indefinite"/>
+      </rect>
+      <rect x="44" y="44" width="52" height="12" rx="6" fill="none" stroke="#0B3B2E" stroke-width="0.6" opacity="0.3"/>
+      <circle cy="50" r="3.2" fill="#FFFFFF" opacity="0.9">
+        <animate attributeName="cx" values="52;88;52" dur="2.6s" repeatCount="indefinite"/>
+      </circle>
+      <rect x="24" y="46" width="8" height="16" rx="4" fill="url(#bodyMetal${suffix})" stroke="#9AA3A0" stroke-width="0.8"/>
+      <rect x="108" y="46" width="8" height="16" rx="4" fill="url(#bodyMetal${suffix})" stroke="#9AA3A0" stroke-width="0.8"/>
+      <circle cx="20" cy="70" r="2" fill="#F2C230" opacity="0.7">
+        <animate attributeName="cy" values="70;60;70" dur="3.4s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.7;0.1;0.7" dur="3.4s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="118" cy="66" r="1.6" fill="#F2C230" opacity="0.6">
+        <animate attributeName="cy" values="66;54;66" dur="4s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.6;0.05;0.6" dur="4s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="104" cy="20" r="1.4" fill="#1F7A52" opacity="0.6">
+        <animate attributeName="cy" values="20;10;20" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.6;0.05;0.6" dur="3s" repeatCount="indefinite"/>
+      </circle>
+      <text x="70" y="106" font-family="Baloo 2, sans-serif" font-size="7" font-weight="700" letter-spacing="2" fill="#0E4A36" text-anchor="middle" opacity="0.55">CH · UNIT</text>
+    </svg>`;
+}
+(function initLandingRobots() {
+  const centerSlot = document.getElementById("ch-landing-slot");
+  if (centerSlot) centerSlot.innerHTML = chSvgMarkup("Land", 60);
+})();
+
+/* =========================================================
+   VETERINARY MODULE
+========================================================= */
+const TREATMENTS = [
+  { key: "esterilizacion", label: "Esterilización", ico: "✂️" },
+  { key: "castracion", label: "Castración", ico: "🩺" },
+  { key: "desparasitacion", label: "Desparasitación", ico: "💊" },
+  { key: "vacunacion", label: "Vacunación", ico: "💉" },
+  { key: "sarna", label: "Tratamiento de sarna", ico: "🧴" },
+  { key: "consultaGeneral", label: "Consulta general", ico: "🐾" },
+];
+
+const VTABS = [
+  { key: "inicio", label: "Inicio", ico: "🏠" },
+  { key: "registro", label: "Registro", ico: "📋" },
+  { key: "atencion", label: "Atención", ico: "🩹" },
+  { key: "sorteo", label: "Sortear", ico: "🎡" },
+  { key: "resumen", label: "Resumen", ico: "📊" },
+];
+
+let vetPatients = {};
+let currentVTab = "inicio";
+let vsisfohEstado = "si";
+let vatnResult = null;
+
+// ---------- BLOQUES DE MASCOTA (registro múltiple) ----------
+let vMascotaBlockSeq = 0;
+let vSexoPorBloque = {};
+let vFotosPorBloque = {};
+
+function crearBloqueMascotaHtml(n) {
+  return `
+    <div class="mascota-block" data-mid="${n}">
+      <div class="mascota-block-head">
+        <span class="mascota-block-num">🐾 Mascota <span class="mascota-block-idx"></span></span>
+        <button type="button" class="mascota-remove" onclick="quitarMascotaBlock(${n})">✕ Quitar</button>
+      </div>
+      <div class="field-wrap"><span class="field-ico">🐾</span><input class="input" id="v-mnombre-${n}" placeholder="Nombre del perrito/mascota"></div>
+      <div class="row-gap">
+        <div class="field-wrap"><span class="field-ico">🐕</span><input class="input" id="v-especie-${n}" placeholder="Especie (ej. Canino, Felino)"></div>
+        <div class="field-wrap"><span class="field-ico">🎗️</span><input class="input" id="v-raza-${n}" placeholder="Raza"></div>
+      </div>
+      <div style="font-size:11px;font-weight:700;color:#8A8478;margin-top:2px;">Sexo</div>
+      <div class="row-gap">
+        <div class="pill-opt" data-vsexo-block="${n}" data-vsexo="Macho" onclick="selectSexoVetBlock(${n},'Macho')">♂ Macho</div>
+        <div class="pill-opt" data-vsexo-block="${n}" data-vsexo="Hembra" onclick="selectSexoVetBlock(${n},'Hembra')">♀ Hembra</div>
+      </div>
+      <div class="field-wrap"><span class="field-ico">📅</span><input class="input" id="v-medad-${n}" placeholder="Edad" maxlength="4"></div>
+      <div class="field-wrap"><span class="field-ico">⚖️</span><input class="input" id="v-mpeso-${n}" placeholder="Peso (kg)" maxlength="6" inputmode="decimal"></div>
+      <div class="field-wrap"><span class="field-ico">📝</span><input class="input" id="v-obs-${n}" placeholder="Observaciones"></div>
+      <div style="font-size:11px;font-weight:700;color:#8A8478;margin-top:2px;">Foto de la mascota</div>
+      <div class="foto-field">
+        <div class="foto-preview" id="v-foto-preview-${n}">🐾</div>
+        <div class="foto-btn-col">
+          <div class="foto-btn-row">
+            <label class="foto-btn" for="v-foto-cam-${n}">📷 Cámara</label>
+            <label class="foto-btn" for="v-foto-input-${n}">🖼️ Galería</label>
+          </div>
+          <input type="file" id="v-foto-cam-${n}" accept="image/*" capture="environment" style="display:none;" onchange="handleFotoVetChange(event, ${n})">
+          <input type="file" id="v-foto-input-${n}" accept="image/*" style="display:none;" onchange="handleFotoVetChange(event, ${n})">
+          <button type="button" class="foto-remove" id="v-foto-remove-${n}" style="display:none;" onclick="clearFotoVet(${n})">Quitar foto</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renumerarBloques() {
+  const blocks = document.querySelectorAll("#mascotas-container .mascota-block");
+  blocks.forEach((b, i) => {
+    const idxEl = b.querySelector(".mascota-block-idx");
+    if (idxEl) idxEl.textContent = i + 1;
+    const btn = b.querySelector(".mascota-remove");
+    if (btn) btn.style.display = blocks.length > 1 ? "inline-flex" : "none";
+  });
+}
+
+function agregarMascotaBlock() {
+  vMascotaBlockSeq++;
+  const n = vMascotaBlockSeq;
+  vSexoPorBloque[n] = "";
+  vFotosPorBloque[n] = "";
+  document.getElementById("mascotas-container").insertAdjacentHTML("beforeend", crearBloqueMascotaHtml(n));
+  renumerarBloques();
+  const el = document.getElementById("v-mnombre-" + n);
+  if (el) { el.scrollIntoView({ behavior: "smooth", block: "center" }); el.focus(); }
+  showToastVet("Mascota agregada ✓");
+}
+
+function quitarMascotaBlock(n) {
+  const blocks = document.querySelectorAll("#mascotas-container .mascota-block");
+  if (blocks.length <= 1) return;
+  const block = document.querySelector('#mascotas-container .mascota-block[data-mid="' + n + '"]');
+  if (block) block.remove();
+  delete vSexoPorBloque[n];
+  delete vFotosPorBloque[n];
+  renumerarBloques();
+}
+
+function selectSexoVetBlock(n, val) {
+  vSexoPorBloque[n] = val;
+  document.querySelectorAll('.pill-opt[data-vsexo-block="' + n + '"]').forEach(el => el.classList.toggle("selected", el.dataset.vsexo === val));
+}
+
+function resetMascotasContainer() {
+  document.getElementById("mascotas-container").innerHTML = "";
+  vSexoPorBloque = {};
+  vFotosPorBloque = {};
+  vMascotaBlockSeq = 1;
+  vSexoPorBloque[1] = "";
+  vFotosPorBloque[1] = "";
+  document.getElementById("mascotas-container").insertAdjacentHTML("beforeend", crearBloqueMascotaHtml(1));
+  renumerarBloques();
+}
+resetMascotasContainer();
+
+function emptyTreatments() {
+  const o = {};
+  TREATMENTS.forEach(t => o[t.key] = { done: false, at: null });
+  return o;
+}
+function showToastVet(text, kind) {
+  const t = document.getElementById("toast-vet");
+  t.textContent = text;
+  t.className = "toast" + (kind === "error" ? " error" : "");
+  t.style.display = "block";
+  setTimeout(() => t.style.display = "none", 3200);
+}
+
+// ---------- SIDEBAR NAV (VET) ----------
+function buildSidebarVet() {
+  const bar = document.getElementById("sidebar-vet");
+  bar.innerHTML = VTABS.map((t, i) => `
+    <button class="side-btn${t.key === currentVTab ? " active" : ""}" onclick="switchVTab('${t.key}')">
+      <span class="ico">${t.ico}</span>${t.label}
+      <span class="mini-ch" style="animation-delay:${(i * 0.15).toFixed(2)}s"></span>
+    </button>`).join("") + `
+    <div class="sidebar-foot">
+      <div class="ch-mini">🤖 CH está activo</div>
+    </div>`;
+}
+let resumenVetDesbloqueado = false;
+function switchVTab(key) {
+  if (key === "resumen" && !resumenVetDesbloqueado) {
+    mostrarModalClave(
+      "Resumen protegido",
+      "Estos son datos privados de dueños y mascotas. Ingresa la clave para verlos.",
+      "alvaro",
+      () => { resumenVetDesbloqueado = true; irAVTab("resumen"); }
+    );
+    return;
+  }
+  irAVTab(key);
+}
+function irAVTab(key) {
+  currentVTab = key;
+  document.querySelectorAll("#app-veterinaria .tabpanel").forEach(p => p.classList.remove("active"));
+  document.getElementById("vpanel-" + key).classList.add("active");
+  buildSidebarVet();
+  if (key === "resumen") renderResumenVet();
+  if (key === "inicio") renderStatsVet();
+  if (key === "sorteo") renderSorteoVet();
+}
+
+// ---------- INICIO (VET) ----------
+function renderStatsVet() {
+  const list = Object.values(vetPatients);
+  const total = list.length;
+  const validados = list.filter(p => p.triajeOk && p.sisfohOk).length;
+  const atenciones = list.reduce((acc, p) => acc + TREATMENTS.filter(t => p.atenciones?.[t.key]?.done).length, 0);
+  const el = document.getElementById("vstats-grid");
+  el.innerHTML = `
+    <div class="card stat-card"><div class="stat-value disp" style="color:#2E4756">${total}</div><div class="stat-label">Registrados</div></div>
+    <div class="card stat-card"><div class="stat-value disp" style="color:#2E7D4F">${validados}</div><div class="stat-label">Validados</div></div>
+    <div class="card stat-card"><div class="stat-value disp" style="color:#C98A12">${atenciones}</div><div class="stat-label">Atenciones</div></div>
+  `;
+}
+
+// ---------- REGISTRO (VET) ----------
+function handleFotoVetChange(e, n) {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+  if (!file.type.startsWith("image/")) {
+    showToastVet("El archivo elegido no es una imagen.", "error");
+    e.target.value = "";
+    return;
+  }
+  const reader = new FileReader();
+  reader.onerror = () => showToastVet("No se pudo leer la foto. Intenta de nuevo.", "error");
+  reader.onload = () => {
+    const img = new Image();
+    img.onerror = () => showToastVet("No se pudo procesar la foto. Prueba con otra imagen.", "error");
+    img.onload = () => {
+      // Redimensiona y comprime para evitar errores de guardado por fotos muy pesadas
+      const MAX_SIDE = 480;
+      let w = img.width, h = img.height;
+      if (w > h && w > MAX_SIDE) { h = Math.round(h * (MAX_SIDE / w)); w = MAX_SIDE; }
+      else if (h >= w && h > MAX_SIDE) { w = Math.round(w * (MAX_SIDE / h)); h = MAX_SIDE; }
+      const canvas = document.createElement("canvas");
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, w, h);
+      let dataUrl;
+      try {
+        dataUrl = canvas.toDataURL("image/jpeg", 0.72);
+      } catch (err) {
+        showToastVet("No se pudo comprimir la foto: " + err.message, "error");
+        return;
+      }
+      vFotosPorBloque[n] = dataUrl;
+      const prev = document.getElementById("v-foto-preview-" + n);
+      prev.innerHTML = `<img src="${dataUrl}" alt="Foto mascota">`;
+      document.getElementById("v-foto-remove-" + n).style.display = "block";
+      showToastVet("Foto lista ✓");
+    };
+    img.src = reader.result;
+  };
+  reader.readAsDataURL(file);
+}
+function clearFotoVet(n) {
+  vFotosPorBloque[n] = "";
+  document.getElementById("v-foto-input-" + n).value = "";
+  document.getElementById("v-foto-cam-" + n).value = "";
+  document.getElementById("v-foto-preview-" + n).innerHTML = "🐾";
+  document.getElementById("v-foto-remove-" + n).style.display = "none";
+}
+
+document.getElementById("form-vregistro").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const dni = document.getElementById("v-dni").value.trim();
+  const nombre = document.getElementById("v-nombre").value.trim();
+  const celular = document.getElementById("v-celular").value.trim();
+  const msgEl = document.getElementById("v-msg");
+
+  if (!/^\d{8}$/.test(dni)) return setMsg(msgEl, "error", "El DNI del dueño debe tener 8 dígitos.");
+  if (!nombre) return setMsg(msgEl, "error", "Ingresa nombres y apellidos del dueño.");
+  if (!celular) return setMsg(msgEl, "error", "Ingresa un celular.");
+
+  const blocks = Array.from(document.querySelectorAll("#mascotas-container .mascota-block"));
+  const mascotas = [];
+  for (let i = 0; i < blocks.length; i++) {
+    const n = blocks[i].dataset.mid;
+    const numVisible = i + 1;
+    const mnombre = document.getElementById("v-mnombre-" + n).value.trim();
+    const especie = document.getElementById("v-especie-" + n).value.trim();
+    const raza = document.getElementById("v-raza-" + n).value.trim();
+    const sexo = vSexoPorBloque[n] || "";
+    const medad = document.getElementById("v-medad-" + n).value.trim();
+    const mpeso = document.getElementById("v-mpeso-" + n).value.trim();
+    const obs = document.getElementById("v-obs-" + n).value.trim();
+    const foto = vFotosPorBloque[n] || "";
+
+    if (!mnombre) return setMsg(msgEl, "error", `Ingresa el nombre de la mascota ${numVisible}.`);
+    if (!especie) return setMsg(msgEl, "error", `Ingresa la especie de la mascota ${numVisible} (${mnombre}).`);
+    if (!sexo) return setMsg(msgEl, "error", `Selecciona el sexo de la mascota ${numVisible} (${mnombre}).`);
+
+    mascotas.push({ mnombre, especie, raza, sexo, medad, mpeso, obs, foto });
+  }
+
+  mascotas.forEach(m => {
+    const nombreNorm = m.mnombre.toLowerCase();
+    let key = Object.keys(vetPatients).find(k => vetPatients[k].dni === dni && (vetPatients[k].mnombre || "").trim().toLowerCase() === nombreNorm);
+    if (!key) {
+      let idx = 1;
+      while (vetPatients[`${dni}_${idx}`]) idx++;
+      key = `${dni}_${idx}`;
+    }
+    const existing = vetPatients[key] || { atenciones: emptyTreatments() };
+    const nuevo = {
+      ...existing, dni, nombre, celular,
+      mnombre: m.mnombre, especie: m.especie, raza: m.raza, sexo: m.sexo, medad: m.medad, mpeso: m.mpeso, obs: m.obs,
+      foto: m.foto || existing.foto || "",
+      triajeOk: true, triajeAt: now(), triajeAtISO: existing.triajeAtISO || new Date().toISOString(), atenciones: existing.atenciones || emptyTreatments(),
+      sisfohOk: true, sisfohEstado: existing.sisfohEstado || "si", sisfohAt: now(),
+    };
+    vetPatients[key] = nuevo;
+    if (USE_FIREBASE) colVet.doc(key).set(nuevo).catch(err => showToastVet("Error al guardar en Firebase: " + err.message, "error"));
+  });
+
+  const cant = mascotas.length;
+  setMsg(msgEl, "ok", `Guardado: ${nombre} (DNI ${dni}) · ${cant} mascota${cant > 1 ? "s" : ""} registrada${cant > 1 ? "s" : ""}. Ya puede pasar a Atención Veterinaria.`);
+  document.getElementById("form-vregistro").reset();
+  resetMascotasContainer();
+  renderAllVet();
+  showToastVet("Registro guardado y formulario limpio ✓");
+});
+
+// ---------- ATENCIÓN VETERINARIA ----------
+function lookupVetAtencion() {
+  const dni = document.getElementById("vatn-dni").value.trim();
+  const wrap = document.getElementById("vatn-result");
+  if (!/^\d{8}$/.test(dni)) { vatnResult = null; wrap.innerHTML = `<div class="msg-box msg-error">Ingresa un DNI válido de 8 dígitos.</div>`; playDenySound(); return; }
+
+  const claves = Object.keys(vetPatients).filter(k => vetPatients[k].dni === dni);
+  if (claves.length === 0) {
+    vatnResult = null;
+    wrap.innerHTML = `
+      <div class="block-box">
+        <div class="block-header">
+          <div class="icow">⛔</div>
+          <div class="txt">Este DNI no tiene registro. Regístralo en la pestaña Registro primero.</div>
+        </div>
+      </div>`;
+    playDenySound();
+    return;
+  }
+
+  if (claves.length === 1) {
+    const p = vetPatients[claves[0]];
+    if (!p.triajeOk) {
+      vatnResult = null;
+      wrap.innerHTML = `
+        <div class="block-box">
+          <div class="block-header">
+            <div class="icow">⛔</div>
+            <div class="txt">Este dueño no puede ser atendido: falta completar Registro.</div>
+          </div>
+          <div class="status-pills">
+            <div class="status-pill ${p?.triajeOk ? "pill-ok" : "pill-bad"}">📋 REGISTRO<br>${p?.triajeOk ? "✓ LISTO" : "✕ FALTA"}</div>
+          </div>
+        </div>`;
+      playDenySound();
+      return;
+    }
+    vatnResult = claves[0];
+    renderVetAtencionPanel();
+    return;
+  }
+
+  // Dueño con varias mascotas registradas
+  const elegibles = claves.filter(k => vetPatients[k].triajeOk);
+  if (elegibles.length === 0) {
+    vatnResult = null;
+    wrap.innerHTML = `
+      <div class="block-box">
+        <div class="block-header">
+          <div class="icow">⛔</div>
+          <div class="txt">Ninguna mascota de este dueño puede ser atendida todavía: falta completar Registro.</div>
+        </div>
+      </div>`;
+    playDenySound();
+    return;
+  }
+  if (elegibles.length === 1) {
+    vatnResult = elegibles[0];
+    renderVetAtencionPanel();
+    return;
+  }
+
+  vatnResult = null;
+  const dueno = vetPatients[elegibles[0]];
+  wrap.innerHTML = `
+    <div class="found-box">
+      <div class="found-name">${dueno.nombre} <span style="color:#8A8478;font-weight:600;">· DNI ${dueno.dni}</span></div>
+      <div class="found-meta">Este dueño tiene ${elegibles.length} mascotas listas para atención. Elige una:</div>
+      <div class="mascota-picker">
+        ${elegibles.map(k => {
+          const p = vetPatients[k];
+          return `<button type="button" class="mascota-pick-btn" onclick="elegirMascotaAtencion('${k}')">🐾 ${p.mnombre} <span>· ${p.especie}${p.raza ? " · " + p.raza : ""}</span></button>`;
+        }).join("")}
+      </div>
+    </div>`;
+}
+function elegirMascotaAtencion(key) {
+  vatnResult = key;
+  renderVetAtencionPanel();
+}
+function renderVetAtencionPanel() {
+  const wrap = document.getElementById("vatn-result");
+  if (!vatnResult) { wrap.innerHTML = ""; return; }
+  const p = vetPatients[vatnResult];
+  if (!p) { wrap.innerHTML = ""; return; }
+  wrap.innerHTML = `
+    <div class="found-box">
+      <div class="found-name">${p.nombre} <span style="color:#8A8478;font-weight:600;">· DNI ${p.dni}</span></div>
+      <div class="found-meta">${p.celular}</div>
+      <div class="pet-badge">🐾 ${p.mnombre} · ${p.especie}${p.raza ? " · " + p.raza : ""}${p.sexo ? " · " + p.sexo : ""}${p.medad ? " · " + p.medad + " (edad)" : ""}${p.mpeso ? " · " + p.mpeso + " kg" : ""}</div>
+      ${p.obs ? `<div class="found-meta" style="margin-top:4px;">Obs: ${p.obs}</div>` : ""}
+      <div class="treat-grid">
+        ${TREATMENTS.map(t => {
+          const done = p.atenciones?.[t.key]?.done;
+          return `
+          <label class="treat-item${done ? " checked" : ""}">
+            <input type="checkbox" ${done ? "checked" : ""} onchange="toggleTratamiento('${vatnResult}','${t.key}', this.checked)">
+            ${t.ico} ${t.label}${done && p.atenciones[t.key].at ? ` <span style="font-size:10px;opacity:.7;">(${p.atenciones[t.key].at})</span>` : ""}
+          </label>`;
+        }).join("")}
+      </div>
+      <button class="btn-primary" style="margin-top:14px;width:100%;" onclick="guardarAtencionVet()">💾 Guardar</button>
+    </div>`;
+}
+function guardarAtencionVet() {
+  document.getElementById("vatn-dni").value = "";
+  vatnResult = null;
+  document.getElementById("vatn-result").innerHTML = "";
+  showToastVet("Atención guardada ✓");
+}
+function toggleTratamiento(dni, key, checked) {
+  const p = vetPatients[dni];
+  if (!p) return;
+  p.atenciones[key] = { done: checked, at: checked ? now() : null };
+  if (USE_FIREBASE) colVet.doc(dni).set(p).catch(err => showToastVet("Error al guardar en Firebase: " + err.message, "error"));
+  renderVetAtencionPanel();
+  renderStatsVet();
+  showToastVet(checked ? "Tratamiento registrado ✓" : "Tratamiento desmarcado");
+}
+
+// ---------- RESUMEN (VET) ----------
+function renderResumenVet() {
+  const filtro = (document.getElementById("vfiltro")?.value || "").trim().toLowerCase();
+  const list = Object.entries(vetPatients).filter(([k, p]) => !filtro || p.dni.includes(filtro) || (p.nombre || "").toLowerCase().includes(filtro) || (p.mnombre || "").toLowerCase().includes(filtro));
+  const table = document.getElementById("vtabla-resumen");
+  const headCols = ["Ficha", "Descargar", "DNI Dueño", "Dueño", "Celular", "Mascota", "Especie", "Raza", "Sexo", "Edad", "Peso (kg)", "Obs.", "Registro", "SISFOH", ...TREATMENTS.map(t => t.label), "Eliminar"];
+  let html = `<thead><tr>${headCols.map(h => `<th>${h}</th>`).join("")}</tr></thead><tbody>`;
+  if (list.length === 0) {
+    html += `<tr><td colspan="${headCols.length}" style="text-align:center;color:#8A8478;padding:20px;">Sin registros todavía.</td></tr>`;
+  } else {
+    list.forEach(([key, p]) => {
+      html += `<tr>
+        <td><button class="check-btn" title="Seleccionar ficha" onclick="toggleFichaSeleccion(this)">✓</button></td>
+        <td><button class="dl-btn" title="Descargar ficha" onclick="descargarFichaDirecta(this,'${key}')">📥</button></td>
+        <td>${p.dni}</td><td>${p.nombre}</td><td>${p.celular}</td>
+        <td>${p.mnombre}</td>
+        <td>${p.especie}</td><td>${p.raza || "—"}</td><td>${p.sexo || "—"}</td>
+        <td>${p.medad || "—"}</td><td>${p.mpeso || "—"}</td><td>${p.obs || "—"}</td>
+        <td>${p.triajeOk ? '<span class="ok-ico">✓</span>' : '<span class="no-ico">✕</span>'}</td>
+        <td>${p.sisfohOk ? '<span class="ok-ico">✓</span>' : '<span class="no-ico">✕</span>'}</td>
+        ${TREATMENTS.map(t => `<td>${p.atenciones?.[t.key]?.done ? '<span class="ok-ico">✓</span>' : '<span class="dash">—</span>'}</td>`).join("")}
+        <td><button class="del-btn" title="Eliminar este registro" onclick="eliminarRegistroVet('${key}','${(p.mnombre || "").replace(/'/g, "\\'")}','${p.dni}')">🗑️</button></td>
+      </tr>`;
+    });
+  }
+  html += "</tbody>";
+  table.innerHTML = html;
+}
+
+function eliminarRegistroVet(key, mnombre, dni) {
+  const ok = confirm(`¿Eliminar el registro de "${mnombre || "esta mascota"}" (DNI dueño ${dni})?\n\nEsta acción no se puede deshacer.`);
+  if (!ok) return;
+  delete vetPatients[key];
+  if (USE_FIREBASE) colVet.doc(key).delete().catch(err => showToastVet("Error al eliminar en Firebase: " + err.message, "error"));
+  renderAllVet();
+  showToastVet("Registro eliminado ✓");
+}
+
+// ---------- FICHA MASCOTA (MODAL ESTILO CARNET) ----------
+let currentFichaDni = null;
+
+function toggleFichaSeleccion(btn) {
+  document.querySelectorAll(".check-btn.checked").forEach(b => b.classList.remove("checked"));
+  btn.classList.add("checked");
+}
+
+async function descargarFichaDirecta(btn, dni) {
+  const p = vetPatients[dni];
+  if (!p) return;
+  if (typeof html2canvas === "undefined") {
+    showToastVet("No se pudo cargar el generador de imagen. Revisa tu conexión.", "error");
+    return;
+  }
+  const original = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = "…";
+  showToastVet("Generando imagen...");
+
+  const clone = document.createElement("div");
+  clone.className = "carnet-card";
+  clone.innerHTML = buildFichaCardHtml(p);
+  clone.querySelectorAll(".no-download").forEach(el => el.remove());
+  clone.style.width = "700px";
+  clone.style.position = "fixed";
+  clone.style.left = "-9999px";
+  clone.style.top = "0";
+  document.body.appendChild(clone);
+
+  try {
+    if (document.fonts && document.fonts.ready) { try { await document.fonts.ready; } catch (e) {} }
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+    const canvas = await html2canvas(clone, { backgroundColor: null, scale: 2, useCORS: true, letterRendering: true });
+    const link = document.createElement("a");
+    const nombreArchivo = `ficha_${(p.mnombre || "mascota").trim().replace(/\s+/g, "_")}_${p.dni}.png`;
+    link.download = nombreArchivo;
+    link.href = canvas.toDataURL("image/png");
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    showToastVet("Ficha descargada ✓");
+  } catch (err) {
+    showToastVet("No se pudo generar la imagen: " + err.message, "error");
+  } finally {
+    document.body.removeChild(clone);
+    btn.disabled = false;
+    btn.textContent = original;
+  }
+}
+
+function formatearFechaCompleta(iso) {
+  if (!iso) return null;
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return null;
+  const texto = d.toLocaleDateString("es-PE", { day: "numeric", month: "long", year: "numeric" });
+  return texto.charAt(0).toUpperCase() + texto.slice(1);
+}
+
+function buildFichaCardHtml(p) {
+  const foto = p.foto ? `<img src="${p.foto}" alt="${p.mnombre}">` : "🐾";
+  const logoHtml = MUNI_LOGO_SRC ? `<img src="${MUNI_LOGO_SRC}" alt="Logo Municipalidad">` : "🐾";
+  const fechaEmision = formatearFechaCompleta(p.triajeAtISO) || p.triajeAt || "—";
+  const treatChips = TREATMENTS.map(t => {
+    const done = p.atenciones?.[t.key]?.done;
+    return `<span class="carnet-treat-chip${done ? " done" : ""}">${t.ico} ${t.label}${done ? " ✓" : ""}</span>`;
+  }).join("");
+  return `
+    <div class="carnet-header">
+      <div class="carnet-logo">
+        <div class="ico">${logoHtml}</div>
+        <div class="txt">MUNICIPALIDAD<br><b>DISTRITAL DE<br>LURIGANCHO</b></div>
+      </div>
+      <div class="carnet-badge">SUBGERENCIA DE<span class="big">SALUD PÚBLICA</span>Y PROGRAMAS SOCIALES</div>
+    </div>
+    <div class="carnet-body">
+      <div class="carnet-photo-col">
+        <div class="carnet-photo">${foto}</div>
+        <div class="carnet-id-label">IDENTIFICACIÓN</div>
+        <div class="carnet-id-value">DNI-${p.dni}</div>
+      </div>
+      <div class="carnet-fields">
+        <div class="carnet-field"><div class="f-lbl">NOMBRE DE LA MASCOTA</div><div class="f-val">${p.mnombre || "—"}</div></div>
+        <div class="carnet-field-row">
+          <div class="carnet-field"><div class="f-lbl">RAZA</div><div class="f-val">${p.raza || "—"}</div></div>
+          <div class="carnet-field"><div class="f-lbl">SEXO</div><div class="f-val">${p.sexo || "—"}</div></div>
+        </div>
+        <div class="carnet-field-row">
+          <div class="carnet-field"><div class="f-lbl">ESPECIE</div><div class="f-val">${p.especie || "—"}</div></div>
+          <div class="carnet-field"><div class="f-lbl">EDAD</div><div class="f-val">${p.medad || "—"}</div></div>
+        </div>
+        <div class="carnet-field"><div class="f-lbl">FECHA DE EMISIÓN</div><div class="f-val">${fechaEmision}</div></div>
+        <div class="carnet-field"><div class="f-lbl">NOMBRE DEL PROPIETARIO</div><div class="f-val">${p.nombre || "—"}</div></div>
+        <div class="carnet-status-row no-download">
+          <div class="carnet-status-pill ${p.triajeOk ? "ok" : "bad"}">REGISTRO ${p.triajeOk ? "✓" : "✕"}</div>
+          <div class="carnet-status-pill ${p.sisfohOk ? "ok" : "bad"}">SISFOH ${p.sisfohOk ? "✓" : "✕"}</div>
+        </div>
+      </div>
+    </div>
+    <div class="carnet-treat-wrap no-download">
+      <div class="carnet-treat-title">ATENCIONES</div>
+      <div class="carnet-treat-list">${treatChips}</div>
+    </div>
+  `;
+}
+
+function openFichaVet(dni) {
+  const p = vetPatients[dni];
+  if (!p) return;
+  currentFichaDni = dni;
+  document.getElementById("ficha-card").innerHTML = buildFichaCardHtml(p);
+  document.getElementById("ficha-overlay").classList.add("open");
+}
+function closeFichaVet() {
+  document.getElementById("ficha-overlay").classList.remove("open");
+  document.querySelectorAll(".check-btn.checked").forEach(b => b.classList.remove("checked"));
+}
+async function descargarFichaVet() {
+  const dni = currentFichaDni;
+  const p = vetPatients[dni];
+  const original = document.getElementById("ficha-card");
+  if (!p || !original) return;
+  if (typeof html2canvas === "undefined") {
+    showToastVet("No se pudo cargar el generador de imagen. Revisa tu conexión.", "error");
+    return;
+  }
+  const btn = document.getElementById("carnet-download-btn");
+  const btnTxt = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = "Generando imagen...";
+
+  const clone = original.cloneNode(true);
+  clone.querySelectorAll(".no-download").forEach(el => el.remove());
+  clone.style.width = "700px";
+  clone.style.position = "fixed";
+  clone.style.left = "-9999px";
+  clone.style.top = "0";
+  document.body.appendChild(clone);
+
+  try {
+    if (document.fonts && document.fonts.ready) { try { await document.fonts.ready; } catch (e) {} }
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+    const canvas = await html2canvas(clone, { backgroundColor: null, scale: 2, useCORS: true, letterRendering: true });
+    const link = document.createElement("a");
+    const nombreArchivo = `ficha_${(p.mnombre || "mascota").trim().replace(/\s+/g, "_")}_${p.dni}.png`;
+    link.download = nombreArchivo;
+    link.href = canvas.toDataURL("image/png");
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    showToastVet("Ficha descargada ✓");
+  } catch (err) {
+    showToastVet("No se pudo generar la imagen: " + err.message, "error");
+  } finally {
+    document.body.removeChild(clone);
+    btn.disabled = false;
+    btn.textContent = btnTxt;
+  }
+}
+async function vaciarTodoVet() {
+  if (!confirm("¿Borrar todos los registros veterinarios? Esta acción no se puede deshacer.")) return;
+  vetPatients = {};
+  if (USE_FIREBASE) {
+    try {
+      const snap = await colVet.get();
+      const batch = db.batch();
+      snap.forEach(d => batch.delete(d.ref));
+      await batch.commit();
+    } catch (err) { showToastVet("Error al borrar en Firebase: " + err.message, "error"); }
+  }
+  renderAllVet();
+  showToastVet("Se borraron todos los registros.");
+}
+function exportExcelVet() {
+  const filtro = (document.getElementById("vfiltro")?.value || "").trim().toLowerCase();
+  const list = Object.values(vetPatients).filter(p => !filtro || p.dni.includes(filtro) || (p.nombre || "").toLowerCase().includes(filtro) || (p.mnombre || "").toLowerCase().includes(filtro));
+  if (list.length === 0) { showToastVet("No hay registros para descargar.", "error"); return; }
+
+  const rows = list.map(p => {
+    const row = {
+      "DNI Dueño": p.dni, "Dueño": p.nombre, "Celular": p.celular,
+      "Mascota": p.mnombre, "Especie": p.especie, "Raza": p.raza || "", "Sexo": p.sexo || "",
+      "Edad": p.medad || "", "Peso (kg)": p.mpeso || "", "Observaciones": p.obs || "",
+      "Registro": p.triajeOk ? "Sí" : "No", "SISFOH": p.sisfohOk ? "Sí" : "No",
+    };
+    TREATMENTS.forEach(t => { row[t.label] = p.atenciones?.[t.key]?.done ? "Sí" : "No"; });
+    return row;
+  });
+
+  if (typeof XLSX === "undefined") { showToastVet("No se pudo cargar Excel. Revisa tu conexión.", "error"); return; }
+  const ws = XLSX.utils.json_to_sheet(rows);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Resumen Veterinaria");
+  const fecha = new Date().toISOString().slice(0, 10);
+  XLSX.writeFile(wb, `resumen_campana_veterinaria_${fecha}.xlsx`);
+  showToastVet("Excel descargado ✓");
+}
+
+// ---------- SORTEO (VET) ----------
+let sorteoExcluidosVet = new Set();
+let sorteoRotacionActualVet = 0;
+let sorteoGirandoVet = false;
+let sorteoBulbIntervalVet = null;
+
+function getParticipantesSorteoVet() {
+  return Object.values(vetPatients).filter(p => !sorteoExcluidosVet.has(p.dni));
+}
+function initRuletaBulbsVet() {
+  const rim = document.getElementById("vruleta-rim");
+  if (!rim || rim.dataset.built) return;
+  rim.dataset.built = "1";
+  const size = rim.clientWidth || 296;
+  const cx = size / 2, cy = size / 2, radius = size / 2 - 9;
+  for (let i = 0; i < RULETA_N_BULBS; i++) {
+    const ang = (i / RULETA_N_BULBS) * Math.PI * 2;
+    const x = cx + radius * Math.cos(ang) - 3.5;
+    const y = cy + radius * Math.sin(ang) - 3.5;
+    const bulb = document.createElement("div");
+    bulb.className = "ruleta-bulb";
+    bulb.style.left = x + "px";
+    bulb.style.top = y + "px";
+    rim.appendChild(bulb);
+  }
+}
+function renderSorteoVet() {
+  const disco = document.getElementById("vruleta-disco");
+  if (!disco) return;
+  initRuletaBulbsVet();
+  const participantes = getParticipantesSorteoVet();
+  const n = participantes.length;
+  const countEl = document.getElementById("vsorteo-count");
+  const listEl = document.getElementById("vsorteo-list");
+  countEl.textContent = n === 0 ? "No hay participantes registrados." : `${n} participante${n === 1 ? "" : "s"} en la rueda`;
+
+  if (n === 0) {
+    disco.style.background = "#E4E0D3";
+    listEl.innerHTML = `<div style="text-align:center;color:#B7B09E;">Registra mascotas para poder sortear.</div>`;
+    return;
+  }
+  const slice = 360 / n;
+  const dividerWidth = Math.min(1.6, slice * 0.12);
+  const gradientParts = [];
+  participantes.forEach((p, i) => {
+    const color = SORTEO_COLORS[i % SORTEO_COLORS.length];
+    const start = i * slice;
+    const end = (i + 1) * slice;
+    gradientParts.push(`${color} ${start.toFixed(2)}deg ${(end - dividerWidth).toFixed(2)}deg`);
+    gradientParts.push(`rgba(255,255,255,0.55) ${(end - dividerWidth).toFixed(2)}deg ${end.toFixed(2)}deg`);
+  });
+  disco.style.background = `conic-gradient(${gradientParts.join(", ")})`;
+  listEl.innerHTML = participantes.map((p, i) => `<div>${i + 1}. ${p.mnombre} <span style="color:#B7B09E;">· Dueño ${p.nombre} · DNI ${p.dni}</span></div>`).join("");
+}
+function girarRuletaVet() {
+  if (sorteoGirandoVet) return;
+  const participantes = getParticipantesSorteoVet();
+  if (participantes.length === 0) { showToastVet("No hay participantes para sortear.", "error"); return; }
+
+  sorteoGirandoVet = true;
+  document.getElementById("vwinner-box-wrap").innerHTML = "";
+
+  const n = participantes.length;
+  const winnerIndex = Math.floor(Math.random() * n);
+  const slice = 360 / n;
+  const winnerMidAngle = winnerIndex * slice + slice / 2;
+  const extraSpins = 6;
+  const jitter = (Math.random() * slice * 0.6) - (slice * 0.3);
+  const targetRotation = sorteoRotacionActualVet + extraSpins * 360 + (360 - winnerMidAngle) + jitter;
+  sorteoRotacionActualVet = targetRotation;
+
+  document.getElementById("vruleta-disco").style.transform = `rotate(${targetRotation}deg)`;
+  playSpinSound();
+
+  const bulbs = document.querySelectorAll("#vruleta-rim .ruleta-bulb");
+  let flip = false;
+  clearInterval(sorteoBulbIntervalVet);
+  sorteoBulbIntervalVet = setInterval(() => {
+    flip = !flip;
+    bulbs.forEach((b, i) => b.classList.toggle("off", (i % 2 === 0) === flip));
+  }, 110);
+
+  setTimeout(() => {
+    sorteoGirandoVet = false;
+    clearInterval(sorteoBulbIntervalVet);
+    bulbs.forEach(b => b.classList.remove("off"));
+    mostrarGanadorVet(participantes[winnerIndex]);
+  }, 4300);
+}
+function mostrarGanadorVet(p) {
+  const wrap = document.getElementById("vwinner-box-wrap");
+  wrap.innerHTML = `
+    <div class="winner-box">
+      <div class="label">🎉 GANADOR DEL SORTEO</div>
+      <div class="name">${p.mnombre}</div>
+      <div class="meta">Dueño: ${p.nombre} · DNI ${p.dni}</div>
+      <div class="winner-actions">
+        <button class="btn-primary" style="background:#F2C230; color:#123B2C;" onclick="excluirGanadorVet('${p.dni}')">Quitar de la rueda</button>
+      </div>
+    </div>`;
+  playFanfareSound();
+}
+function excluirGanadorVet(dni) {
+  sorteoExcluidosVet.add(dni);
+  document.getElementById("vwinner-box-wrap").innerHTML = "";
+  renderSorteoVet();
+  showToastVet("Ganador retirado de la rueda para el próximo sorteo.");
+}
+function resetSorteoVet() {
+  sorteoExcluidosVet.clear();
+  document.getElementById("vwinner-box-wrap").innerHTML = "";
+  renderSorteoVet();
+  showToastVet("Lista de participantes restablecida.");
+}
+
+// ---------- MASTER RENDER (VET) ----------
+function renderAllVet() {
+  buildSidebarVet();
+  renderStatsVet();
+  renderResumenVet();
+  renderSorteoVet();
+}
+
+// ---------- FIRESTORE REALTIME SYNC ----------
+function iniciarSincronizacion() {
+  if (!USE_FIREBASE) return;
+  colHumano.onSnapshot(snap => {
+    patients = {};
+    snap.forEach(d => patients[d.id] = d.data());
+    renderAll();
+  }, err => showToast("Error de sincronización: " + err.message, "error"));
+
+  colVet.onSnapshot(snap => {
+    vetPatients = {};
+    snap.forEach(d => vetPatients[d.id] = d.data());
+    renderAllVet();
+  }, err => showToastVet("Error de sincronización: " + err.message, "error"));
+}
+
+// ---------- INIT ----------
+buildSidebar();
+switchTab("inicio");
+renderAll();
+buildSidebarVet();
+switchVTab("inicio");
+renderAllVet();
+marcarEstadoConexion();
+iniciarSincronizacion();
+goLanding();
+</script>
+</body>
+</html>
